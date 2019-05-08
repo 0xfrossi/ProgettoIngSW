@@ -3,6 +3,7 @@ package ing.unibs.it;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.Vector;
 
 public  class Categoria extends Risorsa implements Serializable{
@@ -173,6 +174,30 @@ public  class Categoria extends Risorsa implements Serializable{
 	public int getCodiceUnivoco() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public GregorianCalendar getDataInizioPrestito() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public GregorianCalendar getDataFinePrestito() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public GregorianCalendar getDataRichiestaProroga() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean getProrogaOk() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 
