@@ -40,19 +40,19 @@ public class Libri implements Serializable  {
 	
 	
 	
-	public void removeLibro(String titolo) {
+	public void removeLibro(int codice) {
 		if(libriIng.getArrayRisorse().isEmpty()&& libriIta.getArrayRisorse().isEmpty())
 			System.out.println("L'Archivio e' vuoto \n");
 		
 		else {
-			if(libriIng.esisteInSotto(titolo))
-				libriIng.removePerNome(titolo);
+			if(libriIng.esisteInSotto(codice))
+				libriIng.removePerNome(codice);
 			
-			else if(libriIta.esisteInSotto(titolo))
+			else if(libriIta.esisteInSotto(codice))
 				
-				libriIta.removePerNome(titolo);
+				libriIta.removePerNome(codice);
 			
-			else if(libriIng.esisteInSotto(titolo)==false && libriIta.esisteInSotto(titolo)==false)
+			else if(libriIng.esisteInSotto(codice)==false && libriIta.esisteInSotto(codice)==false)
 				System.out.println("Siamo spiacenti, il libro non e' presente nell'archivio");
 			
 		}

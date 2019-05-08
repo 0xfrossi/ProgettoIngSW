@@ -2,6 +2,7 @@ package ing.unibs.it;
 
 public class Costanti {
 	
+	public static final String CODICE = "Codice univoco: ";
 	public static final String ISCRIZIONE_OK = "Iscrizione rinnovata con successo!\n\n Prossima scadenza: %s \n\n Prossima data di rinnovo: %s \n";
 	public static final String ISCRIZIONE_DECADUTA = "Iscrizione decaduta, ripeti l'iscrizione";
 	public static final String ISCRIIONE_DOPO ="\n Al momento la tua iscrizione non può essere rinnovata, riprova il %s ma entro il %s \n";

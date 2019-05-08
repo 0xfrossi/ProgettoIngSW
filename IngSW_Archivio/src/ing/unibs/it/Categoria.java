@@ -3,6 +3,7 @@ package ing.unibs.it;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Vector;
 
 public  class Categoria extends Risorsa implements Serializable{
 
@@ -19,7 +20,7 @@ public  class Categoria extends Risorsa implements Serializable{
 		boolean check=false;
 	
 		for(int i=0; i<arrayRisorse.size();i++) {
-			if(arrayRisorse.get(i).getNome().equalsIgnoreCase(r.getNome())==true)
+			if(arrayRisorse.get(i).getCodiceUnivoco()==r.getCodiceUnivoco())
 				check=true;
 		}
 		if(check==true)
@@ -43,7 +44,7 @@ public  class Categoria extends Risorsa implements Serializable{
 			
 			
 			for(int i=0; i<arrayRisorse.size();i++) {
-				if(arrayRisorse.get(i).getNome().equalsIgnoreCase(r.getNome())) {
+				if(arrayRisorse.get(i).getCodiceUnivoco()==r.getCodiceUnivoco()) {
 					ok=true;
 					System.out.println("Risorsa gia' presente");	
 					
@@ -58,23 +59,23 @@ public  class Categoria extends Risorsa implements Serializable{
 		}	
 
 	
-	public boolean esisteInSotto(String nome) {
+	public boolean esisteInSotto(int codice) {
 		
 		for(int i=0; i<arrayRisorse.size();i++) {
-			if(arrayRisorse.get(i).getNome().equalsIgnoreCase(nome))
+			if(arrayRisorse.get(i).getCodiceUnivoco()==codice)
 				return true;
 		}	
 		return false;
 	}
 	
-	public void removePerNome(String nome) {
+	public void removePerNome(int codice) {
 		
 		Vector<Integer> posizioni = new Vector<>();
 		
 		for (int i = 0; i <arrayRisorse.size(); i++) 
 			
 		{
-			if(arrayRisorse.get(i).getNome().equalsIgnoreCase(nome))
+			if(arrayRisorse.get(i).getCodiceUnivoco()==codice)
 			{
 				posizioni.add(i);
 			}
@@ -169,9 +170,9 @@ public  class Categoria extends Risorsa implements Serializable{
 	}
 
 	@Override
-	public String getNome() {
+	public int getCodiceUnivoco() {
 		// TODO Auto-generated method stub
-		return null;
+		return 0;
 	}
 
 

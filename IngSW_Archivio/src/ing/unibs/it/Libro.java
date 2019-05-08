@@ -2,15 +2,32 @@ package ing.unibs.it;
 
 import java.io.Serializable;
 
+
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import util.Unibs.MyUtil;
 
-public class Libro  extends Risorsa implements Serializable, PrestitoLibro {
+public class Libro  extends Risorsa implements Serializable, Loanable {
 	
+	public static final int GIORNI_DURATA_PRESTITO = 30;
+	/**
+	 *  durata proroga del prestito di un Libro
+	 */
+	public static final int GIORNI_DURATA_PROROGA = 30;
+	
+	/**
+	 *da che giorno e'possibile chiedere la proroga del prestito del Libro
+	 */
+	public static final int GIORNI_PRIMA_PER_PROROGA = -5;
+	
+	/**
+	 * quanti Libri possono essere in prestito contemporaneamente dalla stessa persona
+	 */
+	public static final int PRESTITI_MAX = 3;
 	
 	private static final long serialVersionUID = -4579943601571388630L;
 	private String nome;
+	private int codiceUnivoco;
 	private int numLicenze;
 	private ArrayList<String>  autori;
 	private int numPagine;
@@ -30,10 +47,11 @@ public class Libro  extends Risorsa implements Serializable, PrestitoLibro {
 	  *@param annoPubblicazione l'anno di pubblicazione
 	 
 	 */
-	public Libro(String nome,int numLicenze, ArrayList<String>  autori ,int numPagine,
+	public Libro(String nome,int codiceUnivoco, int numLicenze, ArrayList<String>  autori ,int numPagine,
 				String casaEd,String genere,GregorianCalendar annoPub) {
 		
 		this.nome=nome;
+		this.codiceUnivoco=codiceUnivoco;
 		this.numLicenze=numLicenze;
 		this.numPagine=numPagine;
 		this.casaEd=casaEd;
@@ -53,7 +71,8 @@ public class Libro  extends Risorsa implements Serializable, PrestitoLibro {
 		//System.out.println(Costanti.CATEGORIA_LIBRO);
 
 		System.out.println(Costanti.TITOLO + getNome());
-		//System.out.println(Costanti.GENERE+ getGenere());
+		System.out.println(Costanti.GENERE+ getGenere());
+		System.out.println(Costanti.CODICE+ getCodiceUnivoco());
 		System.out.print(Costanti.AUTORI);
 		for(int i = 0; i < autori.size(); i++)
 		{
@@ -74,22 +93,9 @@ public class Libro  extends Risorsa implements Serializable, PrestitoLibro {
 	}
 	
 	
-	private ArrayList<String> inserisciAutori(){
-		ArrayList<String> autori = new ArrayList<String>();
-	do
-	{
-		String autore = MyUtil.leggiStringaNonVuota("Inserisci l'autore: ");
-		autori.add(autore+" ");
-	} 
-	while(MyUtil.yesOrNo("ci sono altri autori? "));
-	
-	return autori;
-	}
-	
-	
 	//GETTERS & SETTERS
 	
-	@Override
+	
 	public String getNome() {
 		// TODO Auto-generated method stub
 		return nome;
@@ -164,6 +170,7 @@ public class Libro  extends Risorsa implements Serializable, PrestitoLibro {
 		this.giaInPrestito = giaInPrestito;
 	}
 
+	
 	/**
 	 * precondizione: ci sono copie del Libro disponibili per il prestito
 	 */
@@ -199,6 +206,13 @@ public class Libro  extends Risorsa implements Serializable, PrestitoLibro {
 	public int getPrestitiMax() 
 	{
 		return Libro.PRESTITI_MAX;
+	}
+
+
+	@Override
+	public int getCodiceUnivoco() {
+		// TODO Auto-generated method stub
+		return codiceUnivoco;
 	}
 
 

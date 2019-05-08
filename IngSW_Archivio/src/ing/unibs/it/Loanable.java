@@ -1,23 +1,14 @@
 package ing.unibs.it;
 
-public interface PrestitoLibro {
+import java.util.GregorianCalendar;
+
+public interface Loanable {
 	
-public static final int GIORNI_DURATA_PRESTITO = 30;
+	public abstract GregorianCalendar getDataInizioPrestito();
+	public abstract GregorianCalendar getDataFinePrestito();
+	public abstract GregorianCalendar getDataRichiestaProroga();
+	public abstract boolean   		  getProrogaOk(); 
 	
-	/**
-	 *  durata proroga del prestito di un Libro
-	 */
-	public static final int GIORNI_DURATA_PROROGA = 30;
-	
-	/**
-	 *da che giorno e'possibile chiedere la proroga del prestito del Libro
-	 */
-	public static final int GIORNI_PRIMA_PER_PROROGA = -5;
-	
-	/**
-	 * quanti Libri possono essere in prestito contemporaneamente dalla stessa persona
-	 */
-	public static final int PRESTITI_MAX = 3;
 	
 	/**
 	 * @return il numero di copie della risorsa attualmente in prestito
