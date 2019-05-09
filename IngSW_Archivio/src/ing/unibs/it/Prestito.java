@@ -1,14 +1,17 @@
 package ing.unibs.it;
 
+import java.io.Serializable;
 import java.util.GregorianCalendar;
 import util.Unibs.MyUtil;
 
-public class Prestito  {
+public class Prestito implements Serializable  {
 	
+	
+	private static final long serialVersionUID = 1L;
 	private Risorsa risorsa;
 	private Fruitore fruitore;
-	private GregorianCalendar dataInizio;
-	private GregorianCalendar dataFine;
+	private GregorianCalendar dataInizioPrestito;
+	private GregorianCalendar dataFinePrestito;
 	private GregorianCalendar dataRichiestaProroga;
 	private boolean prorogaOk;
 	
@@ -18,33 +21,57 @@ public class Prestito  {
 	public Prestito(Fruitore fruitore, Risorsa risorsa) {
 		this.risorsa = risorsa;
 		this.fruitore = fruitore;
-		this.dataInizio=(GregorianCalendar)GregorianCalendar.getInstance();
-		dataFine = new GregorianCalendar(dataInizio.get(GregorianCalendar.YEAR), dataInizio.get(GregorianCalendar.MONTH), dataInizio.get(GregorianCalendar.DAY_OF_MONTH));
+		this.dataInizioPrestito=(GregorianCalendar)GregorianCalendar.getInstance();
+		dataFinePrestito = new GregorianCalendar(dataInizioPrestito.get(GregorianCalendar.YEAR), dataInizioPrestito.get(GregorianCalendar.MONTH), dataInizioPrestito.get(GregorianCalendar.DAY_OF_MONTH));
 
-		dataFine.add(GregorianCalendar.DAY_OF_MONTH, risorsa.getGiorniDurataPrestito());
+		dataFinePrestito.add(GregorianCalendar.DAY_OF_MONTH, risorsa.getGiorniDurataPrestito());
 
-		dataRichiestaProroga = new GregorianCalendar(dataFine.get(GregorianCalendar.YEAR), dataFine.get(GregorianCalendar.MONTH), dataFine.get(GregorianCalendar.DAY_OF_MONTH));
+		dataRichiestaProroga = new GregorianCalendar(dataFinePrestito.get(GregorianCalendar.YEAR), dataFinePrestito.get(GregorianCalendar.MONTH), dataFinePrestito.get(GregorianCalendar.DAY_OF_MONTH));
 		dataRichiestaProroga.add(GregorianCalendar.DAY_OF_MONTH, risorsa.getGiorniPrimaPerProroga());
 		prorogaOk = false;		
 	}
 
-	public void stampaPrestito()
-	{
+	
+	/*public Prestito(Risorsa risorsa) {
+		this.risorsa=risorsa;
+		this.dataInizioPrestito=(GregorianCalendar)GregorianCalendar.getInstance();
+		dataFinePrestito = new GregorianCalendar(dataInizioPrestito.get(GregorianCalendar.YEAR), dataInizioPrestito.get(GregorianCalendar.MONTH), dataInizioPrestito.get(GregorianCalendar.DAY_OF_MONTH));
+
+		dataFinePrestito.add(GregorianCalendar.DAY_OF_MONTH, risorsa.getGiorniDurataPrestito());
+
+		dataRichiestaProroga = new GregorianCalendar(dataFinePrestito.get(GregorianCalendar.YEAR), dataFinePrestito.get(GregorianCalendar.MONTH), dataFinePrestito.get(GregorianCalendar.DAY_OF_MONTH));
+		dataRichiestaProroga.add(GregorianCalendar.DAY_OF_MONTH, risorsa.getGiorniPrimaPerProroga());
+		prorogaOk = false;		
+	}*/
+	
+	public void stampaPrestito(){
+		
 		System.out.println("Categoria: " + risorsa.getClass().getSimpleName());
 		System.out.println("Titolo: " + risorsa.getNome());
 		System.out.println("Fruitore: " + fruitore.getUsername());
-		System.out.println("Data prestito: " + MyUtil.toStringData(dataInizio));
-		System.out.println("Data scadenza: " + MyUtil.toStringData(dataFine));
+		System.out.println("Data prestito: " + MyUtil.toStringData(dataInizioPrestito));
+		System.out.println("Data scadenza: " + MyUtil.toStringData(dataFinePrestito));
+		
 		if(!prorogaOk)
-		{
-			System.out.println("Rinnovo disponibile dal: " + MyUtil.toStringData(dataRichiestaProroga));
-		}
+			System.out.println("Rinnovo (1 sola volta) disponibile dal: " + MyUtil.toStringData(dataRichiestaProroga));
+		
 		else
-		{
 			System.out.println("Prestito non rinnovabile");
-		}
+		
 	}
 
+	public void rinnovaPrestito() {
+		
+		GregorianCalendar oggi=(GregorianCalendar)GregorianCalendar.getInstance();
+		if(oggi.after(getDataRichiestaProroga())){
+				setDataInizioPrestito(oggi);
+				setProrogaOk(true);
+			}
+			else{
+				System.out.println("prestito non ancora rinnovabile: ");
+			}
+	}
+	
 	public Risorsa getRisorsa() {
 		return risorsa;
 	}
@@ -61,20 +88,20 @@ public class Prestito  {
 		this.fruitore = fruitore;
 	}
 
-	public GregorianCalendar getDataInizio() {
-		return dataInizio;
+	public GregorianCalendar getDataInizioPrestito() {
+		return dataInizioPrestito;
 	}
 
-	public void setDataInizio(GregorianCalendar dataInizio) {
-		this.dataInizio = dataInizio;
+	public void setDataInizioPrestito(GregorianCalendar dataInizioPrestito) {
+		this.dataInizioPrestito = dataInizioPrestito;
 	}
 
-	public GregorianCalendar getDataFine() {
-		return dataFine;
+	public GregorianCalendar getDataFinePrestito() {
+		return dataFinePrestito;
 	}
 
-	public void setDataFine(GregorianCalendar dataFine) {
-		this.dataFine = dataFine;
+	public void setDataFinePrestito(GregorianCalendar dataFine) {
+		this.dataFinePrestito = dataFine;
 	}
 
 	public GregorianCalendar getDataRichiestaProroga() {

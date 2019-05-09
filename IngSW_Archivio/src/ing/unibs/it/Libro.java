@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import util.Unibs.MyUtil;
 
-public class Libro  extends Risorsa implements Serializable, Loanable {
+public class Libro  extends Risorsa implements Serializable {
 	
 	public static final int GIORNI_DURATA_PRESTITO = 30;
 	/**
@@ -34,7 +34,8 @@ public class Libro  extends Risorsa implements Serializable, Loanable {
 	private String casaEd;
 	private String genere;
 	private GregorianCalendar annoPub;
-	private int giaInPrestito;
+	private int inPrestito;
+	
 	
 	 /** Costuttore 
 	 
@@ -58,7 +59,7 @@ public class Libro  extends Risorsa implements Serializable, Loanable {
 		this.genere=genere;
 		this.annoPub=annoPub;
 		this.autori=autori;
-		this.giaInPrestito=0;
+		this.inPrestito=0;
 	}
 
 	
@@ -88,14 +89,14 @@ public class Libro  extends Risorsa implements Serializable, Loanable {
 		//System.out.println(Costanti.LINGUA+ getLingua());
 		System.out.println(Costanti.NUM_PAG+ getNumPagine());
 		System.out.println(Costanti.NUM_LIC+ getNumLicenze());
-		System.out.println("In prestito: " + giaInPrestito);
-		System.out.println("Copie disponibili " + (getNumLicenze() - getGiaInPrestito()));
+		System.out.println("In prestito: " + getInPrestito());
+		System.out.println("Copie disponibili " + (getNumLicenze() - getInPrestito()));
 	}
 	
 	
 	//GETTERS & SETTERS
 	
-	
+	@Override
 	public String getNome() {
 		// TODO Auto-generated method stub
 		return nome;
@@ -161,27 +162,28 @@ public class Libro  extends Risorsa implements Serializable, Loanable {
 	}
 
 
-	public int getGiaInPrestito() {
-		return giaInPrestito;
+	public int getInPrestito() {
+		return inPrestito;
 	}
 
 
-	public void setGiaInPrestito(int giaInPrestito) {
-		this.giaInPrestito = giaInPrestito;
+	public void setGiaInPrestito(int inPrestito) {
+		this.inPrestito = inPrestito;
 	}
 
 	
 	/**
 	 * precondizione: ci sono copie del Libro disponibili per il prestito
 	 */
-	public void mandaInPrestito() 
+	@Override
+	public void inizioPrestito() 
 	{
-		giaInPrestito++;
+		inPrestito++;
 	}
-	
-	public void tornaDalPrestito()
+	@Override
+	public void finePrestito()
 	{
-		giaInPrestito--;
+		inPrestito--;
 	}
 
 	@Override
@@ -214,6 +216,53 @@ public class Libro  extends Risorsa implements Serializable, Loanable {
 		// TODO Auto-generated method stub
 		return codiceUnivoco;
 	}
+
+//loanable
+	
+	@Override
+	public GregorianCalendar getDataInizioPrestito() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public GregorianCalendar getDataFinePrestito() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public GregorianCalendar getDataRichiestaProroga() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public boolean getProrogaOk() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public void add(Risorsa c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void remove(Risorsa c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+//loanable
+	
+	
 
 
 	

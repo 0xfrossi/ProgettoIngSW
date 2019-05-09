@@ -16,13 +16,14 @@ public abstract class Risorsa implements Serializable, Loanable {
 	}
 
 	public abstract  int getCodiceUnivoco();
-
+	
+	public abstract String getNome();
 
 	public  abstract void stampaDesc();
 	
-	public  void add(Risorsa c) {};
+	public  abstract void add(Risorsa c);
 	
-	public  void remove(Risorsa c) {};
+	public  abstract void remove(Risorsa c);
 	
 	
 	

@@ -4,8 +4,10 @@ import java.util.GregorianCalendar;
 
 public interface Loanable {
 	
-	public abstract GregorianCalendar getDataInizioPrestito();
-	public abstract GregorianCalendar getDataFinePrestito();
+	
+	
+	public abstract GregorianCalendar getDataInizioPrestito() ;
+	public abstract GregorianCalendar getDataFinePrestito() ;
 	public abstract GregorianCalendar getDataRichiestaProroga();
 	public abstract boolean   		  getProrogaOk(); 
 	
@@ -13,7 +15,7 @@ public interface Loanable {
 	/**
 	 * @return il numero di copie della risorsa attualmente in prestito
 	 */
-	public abstract int getGiaInPrestito();
+	public abstract int getInPrestito();
 	/**
 	 * @return quanti giorni la risorsa pu� stare in prestito
 	 */
@@ -35,10 +37,10 @@ public interface Loanable {
 	 * precondizione: ci sono copie della risorsa disponibili per il prestito.
 	 * Aggiorna il numero di copie disponibili e in prestito della risorsa
 	 */
-	public abstract void mandaInPrestito();
+	public abstract void inizioPrestito();
 	/**
 	 * precondizione: ci sono copie della risorsa attualmente in prestito.
 	 * Aggiorna il numero di copie disponibili e in prestito della risorsa
 	 */
-	public abstract void tornaDalPrestito();
+	public abstract void finePrestito();
 }
