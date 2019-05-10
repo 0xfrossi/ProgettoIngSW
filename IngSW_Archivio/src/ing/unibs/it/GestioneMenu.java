@@ -199,7 +199,7 @@ public class GestioneMenu {
 					
 					case 2: //RIMUOVI LIBRO
 					
-						libri.removeLibro(MyUtil.leggiStringaNonVuota(Costanti.REMOVE_LIBRO));
+						libri.removeLibro(MyUtil.leggiIntero(Costanti.REMOVE_LIBRO));
 						break;	
 						
 					case 3: //VISUALIZZA
@@ -228,7 +228,7 @@ public class GestioneMenu {
 	
 	private void inserisciLibroInSottocat() {
 		
-			libro=new Libro(MyUtil.leggiStringaNonVuota(Costanti.INS_TITOLO),MyUtil.leggiInteroConMinimo(Costanti.INS_NLIC, 1), MyUtil.inserisciAutori(),MyUtil.leggiIntero(Costanti.INS_NPAGINE), 
+			libro=new Libro(MyUtil.leggiStringaNonVuota(Costanti.INS_TITOLO),MyUtil.leggiIntero(Costanti.INS_CODICE),MyUtil.leggiInteroConMinimo(Costanti.INS_NLIC, 1), MyUtil.inserisciAutori(),MyUtil.leggiIntero(Costanti.INS_NPAGINE), 
 							MyUtil.leggiStringaNonVuota(Costanti.INS_CASAED),MyUtil.leggiStringaNonVuota(Costanti.INS_GENERE), MyUtil.leggiData(Costanti.INS_ANNOPUBB));
 			MyMenu sceltaSottoCat = new MyMenu(Costanti.INS_LIBRO,Costanti.SCELTE_SOTTOCAT);{
 				boolean finito = false;

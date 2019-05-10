@@ -27,6 +27,7 @@ public abstract class Risorsa implements Serializable, Loanable {
 	public  abstract void remove(Risorsa c);
 	
 	public  abstract ArrayList<String> getAutori();
+	public abstract int getNumLicenze();
 	
 	
 	

@@ -2,10 +2,12 @@ package ing.unibs.it;
 
 public class Costanti {
 	
+	
+	public static final String INS_CODICE ="Inserisci il codice univoco associato: ";
 	public static final String CODICE = "Codice univoco: ";
 	public static final String ISCRIZIONE_OK = "Iscrizione rinnovata con successo!\n\n Prossima scadenza: %s \n\n Prossima data di rinnovo: %s \n";
 	public static final String ISCRIZIONE_DECADUTA = "Iscrizione decaduta, ripeti l'iscrizione";
-	public static final String ISCRIIONE_DOPO ="\n Al momento la tua iscrizione non può essere rinnovata, riprova il %s ma entro il %s \n";
+	public static final String ISCRIIONE_DOPO ="\n Al momento la tua iscrizione non puï¿½ essere rinnovata, riprova il %s ma entro il %s \n";
 	public static final String STAMPA_NOME= "\nNome: ";
 	public static final String STAMPA_COGNOME="\nCognome: ";
 	public static final String STAMPA_NASCITA = "\nData di nascita: " ;
@@ -54,8 +56,10 @@ public class Costanti {
 	public static final String INS_NLIC="Insersci il numero di licenze: ";
 	public static final String INS_LIBRO="In che categoria insersci il libro? ";
 	public static final String[] SCELTE_SOTTOCAT={"libri in lingua inglese", "libri in lingua italiana",};
-	public static final String REMOVE_LIBRO="Inserisci il titolo del libro da rimuovere: ";
+	public static final String REMOVE_LIBRO="Inserisci il codice del libro da rimuovere: ";
 	public static final String[] SCELTE_VISUALIZZ={"Visualizza libri in lingua inglese", "Visualizza libri in lingua italiana","Visualizza tutti i libri presenti"};
 	public static final String[] SCELTE_SOTTO_LIBRI={"Aggiungi un libro ad una categoria", "rimuovi un libro dall'archivio","Visualizza i libri in archivio","Salva il lavoro"};
 	public static final String MENU_LIBRI="Menu' libri: \n";
+	
+	public static final String[] SCELTE_RICERCA_LIBRI={"Cerca per titolo o per parola contenuta in esso", "Cerca per autore"};
 }
