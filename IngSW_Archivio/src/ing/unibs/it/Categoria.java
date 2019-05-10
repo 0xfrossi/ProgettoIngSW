@@ -31,6 +31,14 @@ public  class Categoria extends Risorsa implements Serializable{
 	}
 	
 	
+	public ArrayList<Risorsa> arrayUniforme(){
+		
+		ArrayList<Risorsa> tutti=new ArrayList<>();
+		for(int i=0; i<arrayRisorse.size();i++) 
+			tutti.add(arrayRisorse.get(i));
+		return tutti;
+	}
+	
 	
 	public void addInSotto(Risorsa r) {
 		
@@ -128,11 +136,6 @@ public  class Categoria extends Risorsa implements Serializable{
 
 	
 	
-	@Override
-	public int getGiaInPrestito() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	@Override
 	public int getGiorniDurataPrestito() {
@@ -158,17 +161,7 @@ public  class Categoria extends Risorsa implements Serializable{
 		return 0;
 	}
 
-	@Override
-	public void tornaDalPrestito() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mandaInPrestito() {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	@Override
 	public int getCodiceUnivoco() {
@@ -198,6 +191,36 @@ public  class Categoria extends Risorsa implements Serializable{
 	public boolean getProrogaOk() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public int getInPrestito() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void inizioPrestito() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void finePrestito() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getNome() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ArrayList<String> getAutori() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

@@ -1,6 +1,7 @@
 package ing.unibs.it;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 
 
@@ -84,8 +85,48 @@ public class Libri implements Serializable  {
 		libri.stampaDesc();
 	}
 	
+	/*public ArrayList<Risorsa> creaArrayUniforme(){
+		
+		ArrayList<Risorsa> tutti=new ArrayList<>();
+		for(int i=0; i<libri.getArrayRisorse().size();i++) 
+			tutti.add(libri.getArrayRisorse().get(i));
+		return tutti;
+	}
+	*/
 	
+	public void cercaLibroPerNome(String titolo) {
+		
+		boolean trovato=false;
+		ArrayList<Risorsa> tutti= libri.arrayUniforme();
+		
+		for(Risorsa risorsa : tutti) {
+			if(risorsa.getNome().toLowerCase().contains(titolo.toLowerCase()) || risorsa.getNome().toLowerCase().equals(titolo.toLowerCase())) {
+					trovato=true;
+					risorsa.stampaDesc();
+			}
+		}
+		if(trovato==false)
+			System.out.print("nessun libro trovato");
+		
+	}
 	
+public void cercaLibroPerAutore(String autore) {
+		
+		boolean trovato=false;
+		ArrayList<Risorsa> tutti= libri.arrayUniforme();
+		
+		for(Risorsa risorsa : tutti) {
+			for(String autor: risorsa.getAutori()) {
+				if(autor.toLowerCase().equals(autore.toLowerCase()) || autor.toLowerCase().equals(autore.toLowerCase())) {
+					trovato=true;
+					risorsa.stampaDesc();
+				}
+			}	
+		}
+		if(trovato==false)
+			System.out.print("nessun libro trovato");
+		
+	}
 	
 	
 	

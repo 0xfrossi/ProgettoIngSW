@@ -1,6 +1,7 @@
 package ing.unibs.it;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public abstract class Risorsa implements Serializable, Loanable {
 	
@@ -24,6 +25,8 @@ public abstract class Risorsa implements Serializable, Loanable {
 	public  abstract void add(Risorsa c);
 	
 	public  abstract void remove(Risorsa c);
+	
+	public  abstract ArrayList<String> getAutori();
 	
 	
 	
