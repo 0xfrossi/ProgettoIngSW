@@ -25,6 +25,8 @@ public class Libro  extends Risorsa implements Serializable {
 	 */
 	public static final int PRESTITI_MAX = 3;
 	
+	//Attributi
+	
 	private static final long serialVersionUID = -4579943601571388630L;
 	private String nome;
 	private int codiceUnivoco;
@@ -65,23 +67,19 @@ public class Libro  extends Risorsa implements Serializable {
 	
 	@Override
 	/**
-	 * Stampa della "descrizione" del libro
+	 * visulizza "descrizione" del libro
 	 */
 	public void stampaDesc() {
 		
-		//System.out.println(Costanti.CATEGORIA_LIBRO);
-
 		System.out.println(Costanti.TITOLO + getNome());
 		System.out.println(Costanti.GENERE+ getGenere());
 		System.out.println(Costanti.CODICE+ getCodiceUnivoco());
 		System.out.print(Costanti.AUTORI);
-		for(int i = 0; i < autori.size(); i++)
-		{
+		for(int i = 0; i < autori.size(); i++){
 			System.out.print(" " + autori.get(i));
 			if(i < autori.size()-1)
-			{ 
 				System.out.print(",");
-			}
+			
 			else System.out.println();
 		}	
 		System.out.println(Costanti.CASA_ED+ getCasaEd());
@@ -98,7 +96,6 @@ public class Libro  extends Risorsa implements Serializable {
 	
 	@Override
 	public String getNome() {
-		// TODO Auto-generated method stub
 		return nome;
 	}
 	
@@ -176,37 +173,32 @@ public class Libro  extends Risorsa implements Serializable {
 	 * precondizione: ci sono copie del Libro disponibili per il prestito
 	 */
 	@Override
-	public void inizioPrestito() 
-	{
+	public void inizioPrestito(){
 		inPrestito++;
 	}
+	
 	@Override
-	public void finePrestito()
-	{
+	public void finePrestito(){
 		inPrestito--;
 	}
 
 	@Override
-	public int getGiorniDurataPrestito() 
-	{
+	public int getGiorniDurataPrestito() {
 		return Libro.GIORNI_DURATA_PRESTITO;
 	}
 
 	@Override
-	public int getGiorniDurataProroga() 
-	{
+	public int getGiorniDurataProroga() {
 		return Libro.GIORNI_DURATA_PROROGA;
 	}
 
 	@Override
-	public int getGiorniPrimaPerProroga() 
-	{
+	public int getGiorniPrimaPerProroga() {
 		return Libro.GIORNI_PRIMA_PER_PROROGA;
 	}
 
 	@Override
-	public int getPrestitiMax() 
-	{
+	public int getPrestitiMax() {
 		return Libro.PRESTITI_MAX;
 	}
 
@@ -260,7 +252,6 @@ public class Libro  extends Risorsa implements Serializable {
 		
 	}
 
-//loanable
 	
 	
 

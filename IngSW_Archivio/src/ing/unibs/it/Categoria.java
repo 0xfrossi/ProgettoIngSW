@@ -6,17 +6,33 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
+
+/**
+ * Definisce l'elemento (sotto)categoria
+ * @author Francesco Rossi
+ *
+ */
 public  class Categoria extends Risorsa implements Serializable{
 
 	
-
+	//Attributi
 	private static final long serialVersionUID = 1L;
 	private ArrayList<Risorsa> arrayRisorse=new ArrayList<Risorsa>();;
 	
-	
+	/**
+	 * Costruttore vuoto
+	 */
 	public Categoria () {	
 	}
 	
+	
+	
+	/**
+	 * Controlla se una risorsa e' gia' presente attraverso un codice
+	 * @param r la risorsa per la quale verificare l'esistenza
+	 * @return true se esiste già in archivio
+	 *		   false altrienti
+	 */
 	public boolean checkRisorsa(Risorsa r) {
 		boolean check=false;
 	
@@ -30,7 +46,10 @@ public  class Categoria extends Risorsa implements Serializable{
 		else return false;
 	}
 	
-	
+	/**
+	 * ragruppa le risorse in sottoCategorie diverse in un unico array
+	 * @return l'array di risorse totali
+	 */
 	public ArrayList<Risorsa> arrayUniforme(){
 		
 		ArrayList<Risorsa> tutti=new ArrayList<>();
@@ -39,7 +58,10 @@ public  class Categoria extends Risorsa implements Serializable{
 		return tutti;
 	}
 	
-	
+	/**
+	 * Aggiunge una risorsa in una sottoCategoria 
+	 * @param r la risorsa da aggiungere
+	 */
 	public void addInSotto(Risorsa r) {
 		
 		boolean ok=false;
@@ -51,7 +73,7 @@ public  class Categoria extends Risorsa implements Serializable{
 		}
 		else {
 			
-			
+	//Controllo che non esista già
 			for(int i=0; i<arrayRisorse.size();i++) {
 				if(arrayRisorse.get(i).getCodiceUnivoco()==r.getCodiceUnivoco()) {
 					ok=true;
@@ -67,7 +89,11 @@ public  class Categoria extends Risorsa implements Serializable{
 		}
 		}	
 
-	
+	/**
+	 * verifica se una risorsa è gia' stata inserita in una sottocategoria
+	 * @param codice il codice della risorsa da verificare
+	 * @return true se esiste gia' false altriementi
+	 */
 	public boolean esisteInSotto(int codice) {
 		
 		for(int i=0; i<arrayRisorse.size();i++) {
@@ -77,30 +103,38 @@ public  class Categoria extends Risorsa implements Serializable{
 		return false;
 	}
 	
+	
+	/**
+	 * Rimuove una risorsa dall'archivio attraverso il codice univoco
+	 * @param codice il codice della risorsa da rimuovere
+	 */
 	public void removePerNome(int codice) {
 		
-		Vector<Integer> posizioni = new Vector<>();
+		ArrayList<Integer> segnaPosti = new ArrayList();
 		
 		for (int i = 0; i <arrayRisorse.size(); i++) 
 			
 		{
 			if(arrayRisorse.get(i).getCodiceUnivoco()==codice)
 			{
-				posizioni.add(i);
+				segnaPosti.add(i);
 			}
 		}
 		/*if(posizioni.size()==0)
 		{
 			System.out.println("Siamo spiacenti, il libro non e' presente nell'archivio");
 		}*/
-		 if(posizioni.size()==1)
+		 if(segnaPosti.size()==1)
 		{
-			arrayRisorse.remove((int)posizioni.get(0));
+			arrayRisorse.remove((int)segnaPosti.get(0));
 			System.out.println("Rimozione avvenuta con successo!");
 		}
 		
 		}	
-				
+	
+	/**
+	 * Visualizza le risorse inserite			
+	 */
 	public void stampaDesc() {
 		
 			for(int i=0;i<arrayRisorse.size();i++)
@@ -113,11 +147,19 @@ public  class Categoria extends Risorsa implements Serializable{
 			}
 	}
 	
+	/**
+	 * Aggiunge una risorsa in arrayRisorse
+	 * @param c risorsa da aggiungere
+	 */
 	public void add (Risorsa c){
 				arrayRisorse.add(c);
 			
 	}
-
+	
+	/**
+	 * Rimuove una risorsa da arrayRisorse
+	 * @param c risorsa da rimuovere
+	 */
 	public void remove(Risorsa c) {
 		arrayRisorse.remove(c);
 	}
@@ -133,9 +175,6 @@ public  class Categoria extends Risorsa implements Serializable{
 	public ArrayList<Risorsa> getArrayRisorse() {
 		return arrayRisorse;
 	}
-
-	
-	
 
 	@Override
 	public int getGiorniDurataPrestito() {
@@ -221,6 +260,12 @@ public  class Categoria extends Risorsa implements Serializable{
 	public ArrayList<String> getAutori() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int getNumLicenze() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 

@@ -6,6 +6,7 @@ import util.Unibs.MyUtil;
 
 public class Prestito implements Serializable  {
 	
+	//Attributi
 	
 	private static final long serialVersionUID = 1L;
 	private Risorsa risorsa;
@@ -16,7 +17,7 @@ public class Prestito implements Serializable  {
 	private boolean prorogaOk;
 	
 	/**
-	 * Il costruttore Prestito associa il fruitore ad una risorsa
+	 * Il costruttore Prestito associa il fruitore ad una risorsa ed inizializza attributi legati al prestito
 	 */
 	public Prestito(Fruitore fruitore, Risorsa risorsa) {
 		this.risorsa = risorsa;
@@ -43,7 +44,9 @@ public class Prestito implements Serializable  {
 		dataRichiestaProroga.add(GregorianCalendar.DAY_OF_MONTH, risorsa.getGiorniPrimaPerProroga());
 		prorogaOk = false;		
 	}*/
-	
+	/**
+	 * Visualizza i dati del prstito
+	 */
 	public void stampaPrestito(){
 		
 		System.out.println("Categoria: " + risorsa.getClass().getSimpleName());
@@ -59,19 +62,26 @@ public class Prestito implements Serializable  {
 			System.out.println("Prestito non rinnovabile");
 		
 	}
-
+	/**
+	 * consente il rinnovo del prestito (1 sola volta)
+	 */
 	public void rinnovaPrestito() {
 		
-		GregorianCalendar oggi=(GregorianCalendar)GregorianCalendar.getInstance();
+		GregorianCalendar oggi=(GregorianCalendar) GregorianCalendar.getInstance();
+		
 		if(oggi.after(getDataRichiestaProroga())){
 				setDataInizioPrestito(oggi);
 				setProrogaOk(true);
 			}
-			else{
-				System.out.println("prestito non ancora rinnovabile: ");
-			}
+		else if(getProrogaOk()==true)
+			System.out.println("proroga gia'concessa, prestito non piu' rinnovabile ");
+		else
+			System.out.println("prestito non ancora rinnovabile ");
+			
 	}
 	
+	
+	// Getters & Setters
 	public Risorsa getRisorsa() {
 		return risorsa;
 	}
@@ -112,7 +122,7 @@ public class Prestito implements Serializable  {
 		this.dataRichiestaProroga = dataRichiestaProroga;
 	}
 
-	public boolean isProrogaOk() {
+	public boolean getProrogaOk() {
 		return prorogaOk;
 	}
 

@@ -2,8 +2,6 @@ package ing.unibs.it;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
-import myLib.BelleStringhe;
 import util.Unibs.MyMenu;
 import util.Unibs.MyUtil;
 
@@ -78,14 +76,18 @@ public class Libri implements Serializable  {
 	
 	
 	
-	
+	/**
+	 * Visualizza tutti i libri nella sottoCategotria italiana
+	 */
 	public void stampaIta() {
 		if(libriIta.getArrayRisorse().isEmpty())
 			System.out.println("L'Archivio e' vuoto \n");
 		
 		libriIta.stampaDesc();
 	}
-	
+	/**
+	 * Visualizza tutti i libri nella sottoCategotria inglese
+	 */
 	public void stampaIng() {
 		if(libriIng.getArrayRisorse().isEmpty())
 			System.out.println("L'Archivio e' vuoto \n");
@@ -93,7 +95,9 @@ public class Libri implements Serializable  {
 		libriIng.stampaDesc();
 	}
 	
-	
+	/**
+	 * Visualizza tutti i libri 
+	 */
 	public void stampaTutto() {
 		if(libriIng.getArrayRisorse().isEmpty()&& libriIta.getArrayRisorse().isEmpty())
 			System.out.println("L'Archivio e' vuoto \n");
@@ -113,8 +117,8 @@ public class Libri implements Serializable  {
 	
 	/**
 	 * metodo che contiene la scelta per effettuare la ricerca di libri
-	 * cercaLibroPerNome()
-	 * cercaLibroPerAutore()
+	 ** cercaLibroPerNome()
+	 * *cercaLibroPerAutore()
 	 */
 	public void cercaLibro() {
 		MyMenu  menuCerca= new MyMenu(Costanti.TITOLO_OP, Costanti.SCELTE_RICERCA_LIBRI); 
@@ -179,6 +183,8 @@ public class Libri implements Serializable  {
 			System.out.print("nessun libro trovato");
 		
 	}
+	
+	
 	/**
 	 * Effettua una ricerca di un libro attraverso l'autore
 	 * @param autore l'autore di cui voglio i libri/o
@@ -237,7 +243,7 @@ public class Libri implements Serializable  {
 				System.out.println("Tutte le copie di " + selezionati.get(seleziona-1).getNome() + " sono in prestito");
 			return null;
 			}
-		}		
+		}	
 	}
 		
 		

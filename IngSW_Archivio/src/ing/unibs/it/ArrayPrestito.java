@@ -6,13 +6,27 @@ import java.util.GregorianCalendar;
 import java.util.Vector;
 import util.Unibs.MyUtil;
 
+/**
+ * Classe che gestisce i prestiti 
+ * 
+ * @author Francesco Rossi
+ *
+ */
 public class ArrayPrestito {
 	
+	//Attributi
 	private ArrayList<Prestito> prestiti;
 	
+	
+	/**
+	 * Costruttore vuoto che inizializza l'array contenente i prestiti
+	 */
 	public ArrayPrestito() {
 		prestiti= new ArrayList<Prestito>();
 	}
+	
+	
+	
 	
 	/**
 	 * precondizione: fruitore e risorsa esistono
@@ -23,12 +37,11 @@ public class ArrayPrestito {
 	 */
 	public boolean prestitoNotExist(Fruitore fruitore, Risorsa risorsa){
 		for(int i=0;i<prestiti.size();i++){
-			if(prestiti.get(i).getRisorsa().getNome().equals(risorsa.getNome()) && prestiti.get(i).getFruitore().getUsername().equals(fruitore.getUsername())){
-				return false;
-			}
+			if(prestiti.get(i).getRisorsa().getNome().equals(risorsa.getNome()) && prestiti.get(i).getFruitore().getUsername().equals(fruitore.getUsername()))
+				return false;	
 		}
 		return true;
-		}
+	}
 	
 	/**
 	 * Controlla se i prestiti nell'array sono scaduti e in caso li rimuovo 
@@ -44,6 +57,9 @@ public class ArrayPrestito {
 	
 	}
 	
+	/**
+	 * Stampa i dati dei prestiti esistenti
+	 */
 	public void stampaPrestiti(){
 		for(int i = 0; i < prestiti.size(); i++){
 			System.out.println(prestiti.get(i).getRisorsa().getNome());
@@ -52,7 +68,7 @@ public class ArrayPrestito {
 	}
 	
 	/**
-	 * creo un prestito e lo aggiungo in "prestiti"
+	 * crea un prestito e lo aggiunge in "prestiti"
 	 * @param fruitore il fruitore che chiede il prestito
 	 * @param risorsa la risorsa chiesta
 	 */
@@ -113,25 +129,44 @@ public class ArrayPrestito {
 		}
 		return arrayPrestiti;
 	}
+	/**
+	 * Seleziona un prestito
+	 * @return il prestito selezionato
+	 */
+	public Prestito selezionaPrestito() {
+		
+		int selezionato;
+		for(int i = 0; i < prestiti.size(); i++){
+			System.out.println((i+1)+".");
+			prestiti.get(i).stampaPrestito();
+			System.out.println();
+		}
+		
+		selezionato = MyUtil.leggiIntero("\n Seleziona: ", 1, prestiti.size());		
+		Prestito prestitoSelezionato = prestiti.get(selezionato-1);
+		return prestitoSelezionato;
+	}
 	
-	public void rinnovaPrestito(ArrayList<Prestito> array){
-		int numRisorsa;
-		if(array.isEmpty())
-			System.out.println("Non ci sono prestiti da rinnovare!");
+	/**
+	 * rinnova un prestito da una lista
+	 */
+	public void rinnovaPrestito(){
+		//int numRisorsa;
+		if(prestiti.isEmpty())
+			System.out.println("Non ci sono prestiti da rinnovare");
 
 		else{
-			System.out.println("Seleziona il prestito da rinnovare: ");
+			System.out.println("Ecco i tuoi prestiti: ");
 			
-			for(int i = 0; i < array.size(); i++){
+			/*for(int i = 0; i < prestiti.size(); i++){
 				System.out.println((i+1)+".");
-				array.get(i).stampaPrestito();
+				prestiti.get(i).stampaPrestito();
 				System.out.println();
 			}
 			
-			 numRisorsa = MyUtil.leggiIntero("\nSeleziona la risorsa a cui vuoi rinnovare il prestito : ", 1, array.size());
-					
-				Prestito prestitoSelezionato = array.get(numRisorsa-1);
-				 prestitoSelezionato.rinnovaPrestito();
+			numRisorsa = MyUtil.leggiIntero("\n Seleziona la risorsa a cui vuoi rinnovare il prestito: ", 1, prestiti.size());		
+			Prestito prestitoSelezionato = prestiti.get(numRisorsa-1);*/
+			selezionaPrestito().rinnovaPrestito();
 				
 				
 				/*if(oggi.after(prestitoSelezionato.getDataRichiestaProroga()))
@@ -181,6 +216,9 @@ public class ArrayPrestito {
 			annullaPrestitiUtente(utenti.get(i));	
 	}
 	
+	
+	
+	//Get
 	
 	public ArrayList<Prestito> getPrestiti() {
 		return prestiti;
