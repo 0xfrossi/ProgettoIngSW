@@ -61,5 +61,6 @@ public class Costanti {
 	public static final String[] SCELTE_SOTTO_LIBRI={"Aggiungi un libro ad una categoria", "rimuovi un libro dall'archivio","Visualizza i libri in archivio","Cerca un libro","Salva il lavoro"};
 	public static final String MENU_LIBRI="Menu' libri: \n";
 	
+	public static final String[] SCELTE_PRESTITO_FRUITORE={"Chiedi un prestito", "Rinnova un prestito","I miei prestiti ","Annulla il prestito di un libro "};
 	public static final String[] SCELTE_RICERCA_LIBRI={"Cerca per titolo o per parola contenuta in esso", "Cerca per autore"};
 }

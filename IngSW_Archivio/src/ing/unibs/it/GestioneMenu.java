@@ -2,7 +2,7 @@ package ing.unibs.it;
 
 import java.io.File;
 
-import parte3.Libro;
+import myLib.ServizioFile;
 import util.Unibs.MyIOFile;
 import util.Unibs.MyMenu;
 import util.Unibs.MyUtil;
@@ -22,7 +22,9 @@ public class GestioneMenu {
 	private ArrayPrestito prestiti;
 	
 	
-	
+	/**
+	 * Costruttore che inizializza gli attributi,legge gli oggetti salvati su file e li carica
+	 */
 	public GestioneMenu() {
 		fruitori=new ArrayFruitore();
 		libri= new Libri();
@@ -52,9 +54,11 @@ public class GestioneMenu {
 		prestiti= (ArrayPrestito) ServizioFile.caricaSingoloOggetto(filePrestiti);
 	}
 	
-	
-	
-	
+	/**
+	 * Contiene l'interfaccia principale del menu' fruitore:
+	 * *iscrizione
+	 * *Area fruitore che esegue il metodo sottoFruitore() previo controllo credenziali
+	 */
 	public void menuGestFruitore() {
 	MyMenu menuPrincipale = new MyMenu("Sezione fruitori",Costanti.SCELTE_FRUITORE);{
 	boolean finito = false;
@@ -110,11 +114,18 @@ public class GestioneMenu {
 	}	
 }
 	
+	
+	/**
+	 * menu' che contiene l'interfaccia principale per l'operatore,accesso previo controllo, contiene:
+	 * *listaFruitori()
+	 * *gestioneLibri()
+	 * *gestionePrestitiOperatore()
+	 */
 	public void sottoOp() {
 		String pass= MyUtil.leggiStringa(Costanti.INS_PASS);
 		if(pass.equals(Costanti.PASS_OPERATORE)) {
-			MyMenu  menuOp= new MyMenu(Costanti.TITOLO_OP, Costanti.SCELTE_OP); 
 			
+			MyMenu  menuOp= new MyMenu(Costanti.TITOLO_OP, Costanti.SCELTE_OP); 
 			boolean finit=false;
 
 			do{
@@ -124,20 +135,20 @@ public class GestioneMenu {
 				case 0: 
 					finit=true;
 					break;
-				case 1:	
+				case 1:	//visualizza i fruitori attuali del sistema
 					
 					listaFruitori();
 						
 					break;
-				case 2: 
+				case 2: //sotto menu' libri
 					gestioneLibri();
 					break;
 					
-				case 3:
+				case 3://sotto menu' prestiti
 					gestionePrestitiOperatore();
 			
 				}
-				}while(!finit );
+			}while(!finit );
 		}
 		
 		else  System.out.println(Costanti.PASS_ERRATA);	
@@ -193,7 +204,7 @@ public class GestioneMenu {
 	}	
 	
 	private void gestionePrestitiFruitore() {
-		MyMenu sottoPrestitiFruitore = new MyMenu(Costanti.COSA_,Costanti.SCELTE_SOTTO_FRUITORE);{
+		MyMenu sottoPrestitiFruitore = new MyMenu(Costanti.COSA_,Costanti.SCELTE_PRESTITO_FRUITORE);{
 			boolean finito = false;
 					
 				do{
@@ -206,25 +217,27 @@ public class GestioneMenu {
 					
 					case 1: //chiedi il prestito
 						chiediIlPrestito();
-						
 						break;
 					
 					case 2: //rinnova prestito
 						prestiti.rinnovaPrestito(fruitore);
+						ServizioFile.salvaSingoloOggetto(filePrestiti, prestiti, false);
+						ServizioFile.salvaSingoloOggetto(fileLibri, libri, false);
 					
 						break;	
 					case 3://Visualizza prestiti in corso
-					
 						prestiti.stampaPrestitiUtente(prestiti.filtraPrestitiPerUser(getFruitore()));
 						break;
 					case 4:	//annulla prestito di libro
 						prestiti.annullaPrestitoRisorsa(getFruitore(), libri.scegliPerNome(MyUtil.leggiStringaNonVuota("inserisci il titolo del libro del quale vuoi annullare il prestito: ")));
-						
+						ServizioFile.salvaSingoloOggetto(filePrestiti, prestiti, false);
+						ServizioFile.salvaSingoloOggetto(fileLibri, libri, false);
 				
 					default: //in caso si inserisca un valore non riconosciuto (teoricamente mai applicato)
 						System.out.println(Costanti.COM_NON_RIC);
 						break;
 					}
+					
 				} 	while(!finito);	
 		}
 		
@@ -236,31 +249,31 @@ public class GestioneMenu {
 	
 	private void chiediIlPrestito(){
 		
-		if(prestiti.contaPrestitiUtente(getFruitore().getUsername(), "Libri") == Libro.PRESTITI_MAX)
+		if(prestiti.contaPrestitiUtente(getFruitore().getUsername(), "Libri") == libro.getPrestitiMax())
 		
 			System.out.println("Operazione non disponibile, hai gia'in prestito il numero di risorse massime per la categoria Libri ");
 		
 		else{
 			Libro libro = (Libro) libri.scegliPerNome(MyUtil.leggiStringaNonVuota("Inserisci il titolo del libro che richiedi in prestito: "));
 			
-			if(libro != null)
-			{
-				if(prestiti.prestitoNotExist(getFruitore(), libro))
-				{
+			if(libro != null){
+				if(prestiti.prestitoNotExist(getFruitore(), libro)){
 					prestiti.addPrestito(getFruitore(), libro);
-					System.out.println(libro.getNome() + " prenotato!");
+					System.out.println(libro.getNome() + "prenotazione avvenuta con successo!");
 				}
-				else//!prestitoFattibile se l'utente ha gi� una copia in prestito
-				{
-					System.out.println("Hai gia' il prestito richiesto");
-				}
+				else
+					System.out.println("Hai gia' il libro chiesto ");
+				
 			}
-//			qui libro==null: vuol dire che l'utente non ha selezionato un libro (0: torna indietro)
+//			qui libro==null
 		}
+		ServizioFile.salvaSingoloOggetto(filePrestiti, prestiti, false);
+		ServizioFile.salvaSingoloOggetto(fileLibri, libri, false);
+		
 		
 	}
 		
-	}
+	
 	
 	
 	
