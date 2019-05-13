@@ -167,7 +167,7 @@ public class Libri implements Serializable  {
 	 * Effettua una ricerca di un libro tramite titolo o parte di esso
 	 * @param titolo il titolo da ricercare
 	 */
-	public void cercaLibroPerNome(String titolo) {
+	private void cercaLibroPerNome(String titolo) {
 		
 		boolean trovato=false;
 		ArrayList<Risorsa> tutti= libri.arrayUniforme();
@@ -189,7 +189,7 @@ public class Libri implements Serializable  {
 	 * Effettua una ricerca di un libro attraverso l'autore
 	 * @param autore l'autore di cui voglio i libri/o
 	 */
-	public void cercaLibroPerAutore(String autore) {
+	private void cercaLibroPerAutore(String autore) {
 		
 		boolean trovato=false;
 		ArrayList<Risorsa> tutti= libri.arrayUniforme();
@@ -241,7 +241,7 @@ public class Libri implements Serializable  {
 				return tutti.get(seleziona-1);
 			else {
 				System.out.println("Tutte le copie di " + selezionati.get(seleziona-1).getNome() + " sono in prestito");
-			return null;
+				return null;
 			}
 		}	
 	}

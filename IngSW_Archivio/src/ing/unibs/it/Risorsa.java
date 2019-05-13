@@ -2,6 +2,8 @@ package ing.unibs.it;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
+
 /**
  * Classe astratta che definisce la risorsa, un elemento base
  * @author Francesco Rossi

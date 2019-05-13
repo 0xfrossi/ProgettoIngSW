@@ -49,17 +49,39 @@ public class ArrayFruitore implements Serializable {
 	
 	
 	
-	public void controlloIscrizioni(){
+	public ArrayList<Fruitore> utentiScaduti(){
 		
+		ArrayList<Fruitore> scaduti=new ArrayList();
 		if(!fruitori.isEmpty()) {
+			for (int i=0; i<fruitori.size(); i++){
+			
+			fruitori.get(i).ControlloDecadenzaFruitore();
+			if(!fruitori.get(i).isStatoFruitore())
+				scaduti.add(fruitori.get(i));
+				
+			}
+			
+		}
+		return scaduti;
+	}
+	
+	public void rimuoviIscrizioni(ArrayList<Fruitore> scaduti){
+		
+		for(Fruitore fruitore: scaduti)
+			scaduti.remove(fruitore);
+			
+		/*if(!fruitori.isEmpty()) {
 			for (int i=0; i<fruitori.size(); i++){
 			
 			fruitori.get(i).ControlloDecadenzaFruitore();
 			
 				if(!fruitori.get(i).isStatoFruitore())	
+		
 					fruitori.remove(i);	
 			}
-		} 
+		} */
+		
+		
 	}
 
 	

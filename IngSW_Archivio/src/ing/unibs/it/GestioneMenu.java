@@ -2,9 +2,7 @@ package ing.unibs.it;
 
 import java.io.File;
 
-
-
-
+import parte3.Libro;
 import util.Unibs.MyIOFile;
 import util.Unibs.MyMenu;
 import util.Unibs.MyUtil;
@@ -18,19 +16,25 @@ public class GestioneMenu {
 	private ArrayFruitore fruitori;
 	private File file ;
 	private File fileLibri ;
+	private File filePrestiti;
 	private Libri libri;
 	private Libro libro;
+	private ArrayPrestito prestiti;
+	
 	
 	
 	public GestioneMenu() {
 		fruitori=new ArrayFruitore();
 		libri= new Libri();
+		prestiti= new ArrayPrestito();
 		file= new File("fruitori.txt");
 		fileLibri= new File("libri.txt");
+		filePrestiti= new File("prestiti.txt");
 		
 		try {
 			ServizioFile.checkFile(file, fruitori);
 			ServizioFile.checkFile(fileLibri, libri);
+			ServizioFile.checkFile(filePrestiti, prestiti);
 			/*if(file.length()!=0)
 				fruitori=(ArrayFruitore)MyIOFile.leggiOggetto(file);
 			
@@ -45,6 +49,7 @@ public class GestioneMenu {
 		}	
 		fruitori = (ArrayFruitore)ServizioFile.caricaSingoloOggetto(file);
 		libri = (Libri)ServizioFile.caricaSingoloOggetto(fileLibri);
+		prestiti= (ArrayPrestito) ServizioFile.caricaSingoloOggetto(filePrestiti);
 	}
 	
 	
@@ -127,6 +132,9 @@ public class GestioneMenu {
 				case 2: 
 					gestioneLibri();
 					break;
+					
+				case 3:
+					gestionePrestitiOperatore();
 			
 				}
 				}while(!finit );
@@ -169,6 +177,11 @@ public class GestioneMenu {
 				
 					fruitore.stampaFruitore();
 					break;	
+				case 3://cerca libro
+					libri.cercaLibro();
+					break;
+				case 4:	//Sezione prestiti
+					gestionePrestitiFruitore();
 			
 				default: //in caso si inserisca un valore non riconosciuto (teoricamente mai applicato)
 					System.out.println(Costanti.COM_NON_RIC);
@@ -179,6 +192,104 @@ public class GestioneMenu {
 			
 	}	
 	
+	private void gestionePrestitiFruitore() {
+		MyMenu sottoPrestitiFruitore = new MyMenu(Costanti.COSA_,Costanti.SCELTE_SOTTO_FRUITORE);{
+			boolean finito = false;
+					
+				do{
+					int scelta=sottoPrestitiFruitore.scegli();
+				
+					switch(scelta){
+					case 0: //esci
+						finito=true;
+						break;
+					
+					case 1: //chiedi il prestito
+						chiediIlPrestito();
+						
+						break;
+					
+					case 2: //rinnova prestito
+						prestiti.rinnovaPrestito(fruitore);
+					
+						break;	
+					case 3://Visualizza prestiti in corso
+					
+						prestiti.stampaPrestitiUtente(prestiti.filtraPrestitiPerUser(getFruitore()));
+						break;
+					case 4:	//annulla prestito di libro
+						prestiti.annullaPrestitoRisorsa(getFruitore(), libri.scegliPerNome(MyUtil.leggiStringaNonVuota("inserisci il titolo del libro del quale vuoi annullare il prestito: ")));
+						
+				
+					default: //in caso si inserisca un valore non riconosciuto (teoricamente mai applicato)
+						System.out.println(Costanti.COM_NON_RIC);
+						break;
+					}
+				} 	while(!finito);	
+		}
+		
+		
+	}
+	
+	
+	
+	
+	private void chiediIlPrestito(){
+		
+		if(prestiti.contaPrestitiUtente(getFruitore().getUsername(), "Libri") == Libro.PRESTITI_MAX)
+		
+			System.out.println("Operazione non disponibile, hai gia'in prestito il numero di risorse massime per la categoria Libri ");
+		
+		else{
+			Libro libro = (Libro) libri.scegliPerNome(MyUtil.leggiStringaNonVuota("Inserisci il titolo del libro che richiedi in prestito: "));
+			
+			if(libro != null)
+			{
+				if(prestiti.prestitoNotExist(getFruitore(), libro))
+				{
+					prestiti.addPrestito(getFruitore(), libro);
+					System.out.println(libro.getNome() + " prenotato!");
+				}
+				else//!prestitoFattibile se l'utente ha gi� una copia in prestito
+				{
+					System.out.println("Hai gia' il prestito richiesto");
+				}
+			}
+//			qui libro==null: vuol dire che l'utente non ha selezionato un libro (0: torna indietro)
+		}
+		
+	}
+		
+	}
+	
+	
+	
+	private void gestionePrestitiOperatore() {
+		
+		MyMenu sottoOperatorePrestiti = new MyMenu("Gestisci i prestiti: ",Costanti.SCELTE_SOTTO_LIBRI);{
+			boolean finito = false;
+					
+				do{
+					int scelta=sottoOperatorePrestiti.scegli();
+				
+					switch(scelta){
+					case 0: //esci
+						finito=true;
+						break;
+					
+					case 1: //visualizza prestiti 
+						
+						prestiti.stampaPrestitiAttivi();
+						break;
+								
+				
+					default: //in caso si inserisca un valore non riconosciuto (teoricamente mai applicato)
+						System.out.println(Costanti.COM_NON_RIC);
+						break;
+					}
+				} 	while(!finito);	
+			}
+	}
 	
 	private void gestioneLibri() {
 		MyMenu sottoOperatoreLibri = new MyMenu(Costanti.MENU_LIBRI,Costanti.SCELTE_SOTTO_LIBRI);{
@@ -207,13 +318,19 @@ public class GestioneMenu {
 						visualizzaLibri();
 						break;		
 						
-					case 4: //SALVA LAVORO
+						
+					case 4:
+						libri.cercaLibro();
+						
+						
+					case 5: //SALVA LAVORO
 						try {
 						ServizioFile.salvaSingoloOggetto(fileLibri, libri, true);
 						
 						} catch (Exception e) {  e.printStackTrace();	}
 						
-						break;			
+						break;	
+				
 				
 					default: //in caso si inserisca un valore non riconosciuto (teoricamente mai applicato)
 						System.out.println(Costanti.COM_NON_RIC);
@@ -337,6 +454,41 @@ public class GestioneMenu {
 
 
 
+
+	public File getFileLibri() {
+		return fileLibri;
+	}
+
+
+
+
+	public File getFilePrestiti() {
+		return filePrestiti;
+	}
+
+
+
+
+	public Libri getLibri() {
+		return libri;
+	}
+
+
+
+
+	public Libro getLibro() {
+		return libro;
+	}
+
+
+
+
+	public ArrayPrestito getPrestiti() {
+		return prestiti;
+	}
+
+
+	
 
 
 	

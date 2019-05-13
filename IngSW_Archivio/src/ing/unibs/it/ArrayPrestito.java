@@ -67,6 +67,18 @@ public class ArrayPrestito {
 		}
 	}
 	
+	
+	public void stampaPrestitiUtente(ArrayList<Prestito> daStampare) {
+		
+		for(int i=0;i<daStampare.size();i++) {
+			System.out.println();
+			daStampare.get(i).stampaPrestito();
+			System.out.println();	
+		}
+		
+	}
+	
+	
 	/**
 	 * crea un prestito e lo aggiunge in "prestiti"
 	 * @param fruitore il fruitore che chiede il prestito
@@ -129,17 +141,20 @@ public class ArrayPrestito {
 		}
 		return arrayPrestiti;
 	}
+	
 	/**
 	 * Seleziona un prestito
 	 * @return il prestito selezionato
 	 */
-	public Prestito selezionaPrestito() {
+	public Prestito selezionaPrestito(Fruitore fruitore) {
 		
 		int selezionato;
 		for(int i = 0; i < prestiti.size(); i++){
-			System.out.println((i+1)+".");
-			prestiti.get(i).stampaPrestito();
-			System.out.println();
+			if(prestiti.get(i).getFruitore().getUsername().equals(fruitore.getUsername())){
+				System.out.println((i+1)+".");
+				prestiti.get(i).stampaPrestito();
+				System.out.println();
+			}
 		}
 		
 		selezionato = MyUtil.leggiIntero("\n Seleziona: ", 1, prestiti.size());		
@@ -150,7 +165,7 @@ public class ArrayPrestito {
 	/**
 	 * rinnova un prestito da una lista
 	 */
-	public void rinnovaPrestito(){
+	public void rinnovaPrestito(Fruitore fruitore){
 		//int numRisorsa;
 		if(prestiti.isEmpty())
 			System.out.println("Non ci sono prestiti da rinnovare");
@@ -166,7 +181,7 @@ public class ArrayPrestito {
 			
 			numRisorsa = MyUtil.leggiIntero("\n Seleziona la risorsa a cui vuoi rinnovare il prestito: ", 1, prestiti.size());		
 			Prestito prestitoSelezionato = prestiti.get(numRisorsa-1);*/
-			selezionaPrestito().rinnovaPrestito();
+			selezionaPrestito(fruitore).rinnovaPrestito();
 				
 				
 				/*if(oggi.after(prestitoSelezionato.getDataRichiestaProroga()))
@@ -183,6 +198,23 @@ public class ArrayPrestito {
 				}*/
 		}
 	}
+	
+	public void annullaPrestitoRisorsa(Fruitore fruitore, Risorsa risorsaDaAnnullare) {
+		 if(prestitoNotExist(fruitore, risorsaDaAnnullare))
+			 System.out.println("Nessun prestito attivo");
+		 else {
+			
+			for(int i = prestiti.size()-1; i >= 0; i--){
+				if(prestiti.get(i).getFruitore().getUsername().equals(fruitore.getUsername()) && prestiti.get(i).getRisorsa().getCodiceUnivoco()==risorsaDaAnnullare.getCodiceUnivoco()){
+					prestiti.get(i).getRisorsa().finePrestito();
+					prestiti.remove(i);
+					System.out.println("i tuoi prestiti sono stati eliminati");
+				}
+			}
+		 }
+			
+	}
+	
 	
 	
 	/**
