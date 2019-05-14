@@ -46,7 +46,7 @@ public class Libri implements Serializable  {
 	 */
 	public void addInIng(Risorsa l) {
 		if(libriIta.checkRisorsa(l))
-			System.out.println("Risorsa gia' presente");
+			System.out.println(Costanti.RISORSA_PRESENTE);
 		else libriIng.addInSotto(l);
 	}
 	
@@ -57,7 +57,7 @@ public class Libri implements Serializable  {
 	 */
 	public void removeLibro(int codice) {
 		if(libriIng.getArrayRisorse().isEmpty()&& libriIta.getArrayRisorse().isEmpty())
-			System.out.println("L'Archivio e' vuoto \n");
+			System.out.println(Costanti.ARCHIVIO_VUOTO);
 		
 		else {
 			if(libriIng.esisteInSotto(codice))
@@ -68,12 +68,10 @@ public class Libri implements Serializable  {
 				libriIta.removePerNome(codice);
 			
 			else if(libriIng.esisteInSotto(codice)==false && libriIta.esisteInSotto(codice)==false)
-				System.out.println("Siamo spiacenti, il libro non e' presente nell'archivio");
+				System.out.println(Costanti.LIBRO_NON_PRESENTE);
 			
 		}
 	}
-	
-	
 	
 	
 	/**
@@ -81,16 +79,18 @@ public class Libri implements Serializable  {
 	 */
 	public void stampaIta() {
 		if(libriIta.getArrayRisorse().isEmpty())
-			System.out.println("L'Archivio e' vuoto \n");
+			System.out.println(Costanti.ARCHIVIO_VUOTO);
 		
 		libriIta.stampaDesc();
 	}
+	
+	
 	/**
 	 * Visualizza tutti i libri nella sottoCategotria inglese
 	 */
 	public void stampaIng() {
 		if(libriIng.getArrayRisorse().isEmpty())
-			System.out.println("L'Archivio e' vuoto \n");
+			System.out.println(Costanti.ARCHIVIO_VUOTO);
 		
 		libriIng.stampaDesc();
 	}
@@ -100,7 +100,7 @@ public class Libri implements Serializable  {
 	 */
 	public void stampaTutto() {
 		if(libriIng.getArrayRisorse().isEmpty()&& libriIta.getArrayRisorse().isEmpty())
-			System.out.println("L'Archivio e' vuoto \n");
+			System.out.println(Costanti.ARCHIVIO_VUOTO);
 			
 		libri.stampaDesc();
 	}
@@ -135,11 +135,11 @@ public class Libri implements Serializable  {
 				break;
 			case 1:
 				
-				cercaLibroPerNome(MyUtil.leggiStringaNonVuota("Inserisci il titolo (o parte di esso) che cerchi: "));					
+				cercaLibroPerNome(MyUtil.leggiStringaNonVuota(Costanti.CERCA_PER_TITOLO));					
 				break;
 			case 2: 
 				
-				cercaLibroPerAutore(MyUtil.leggiStringaNonVuota("Inserisci l'autore: "));;
+				cercaLibroPerAutore(MyUtil.leggiStringaNonVuota(Costanti.INS_AUTORE));;
 				break;
 			}
 			}while(!finito );
@@ -153,11 +153,11 @@ public class Libri implements Serializable  {
 		
 	for(Risorsa risorsa: libriIta.getArrayRisorse()) {
 		if(risorsa.getCodiceUnivoco()==cercata.getCodiceUnivoco())
-			System.out.println("Lingua Italiana");
+			System.out.println(Costanti.LINGUA_ITA);
 	} 
 	for(Risorsa risorsa: libriIng.getArrayRisorse()) {
 		if(risorsa.getCodiceUnivoco()==cercata.getCodiceUnivoco())
-			System.out.println("Lingua Inglese");
+			System.out.println(Costanti.LINGUA_ING);
 	}
 	
 	}
@@ -180,7 +180,7 @@ public class Libri implements Serializable  {
 			}
 		}
 		if(trovato==false)
-			System.out.print("nessun libro trovato");
+			System.out.print(Costanti.LIBRO_NON_TROVATO);
 		
 	}
 	
@@ -204,7 +204,7 @@ public class Libri implements Serializable  {
 			}	
 		}
 		if(trovato==false)
-			System.out.print("nessun libro trovato");
+			System.out.print(Costanti.LIBRO_NON_TROVATO);
 		
 	}
 	
@@ -224,7 +224,7 @@ public class Libri implements Serializable  {
 			
 		}
 		if(selezionati.isEmpty()) {
-			System.out.println("Nessun libro trovato");
+			System.out.println(Costanti.LIBRO_NON_TROVATO);
 			return null;
 		}
 		else {
@@ -236,11 +236,11 @@ public class Libri implements Serializable  {
 			}
 
 			
-			seleziona=MyUtil.leggiIntero("Seleziona il libro che vuoi ricevere in prestito", 1, selezionati.size());
+			seleziona=MyUtil.leggiIntero(Costanti.SELEZIONA_LIBRO_PRESTITO, 1, selezionati.size());
 			if(selezionati.get(seleziona-1).getInPrestito()< selezionati.get(seleziona-1).getNumLicenze())
 				return tutti.get(seleziona-1);
 			else {
-				System.out.println("Tutte le copie di " + selezionati.get(seleziona-1).getNome() + " sono in prestito");
+				System.out.println(Costanti.COPIE_GIA_INPRESTITO);
 				return null;
 			}
 		}	

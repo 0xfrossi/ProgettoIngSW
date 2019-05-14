@@ -7,19 +7,24 @@ import java.util.GregorianCalendar;
 
 import util.Unibs.MyUtil;
 
+
+/**
+ * Classe che gestisce la lista di fruitori del sistema
+ * @author Francesco Rossi
+ *
+ */
 public class ArrayFruitore implements Serializable {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5762203246975649666L;
-	/**
-	 * 
-	 */
 	
+	  
+    //Attributi
+	private static final long serialVersionUID = 5762203246975649666L;
 	private ArrayList<Fruitore> fruitori ;
 	
 	
+	/**
+	 * Costruttore che inizializza il vettore fruitori
+	 */
 	public ArrayFruitore() {
 		
 		fruitori = new ArrayList <Fruitore>();
@@ -27,7 +32,10 @@ public class ArrayFruitore implements Serializable {
 
 	
 	
-	
+	/**
+	 * aggiunge un fruitore alla lista 
+	 * @param fruitore il fruitore da aggiungere
+	 */
 	public void addFriutore(Fruitore fruitore) {
 		if(fruitori.isEmpty()) { 
 			if(MyUtil.maggiorenne(fruitore.getDataDiNascita())) {
@@ -48,7 +56,10 @@ public class ArrayFruitore implements Serializable {
 	}
 	
 	
-	
+	/**
+	 * controlla se le iscrizioni degli utenti sono scadute e in caso le raggruppa in un array
+	 * @return array di utenti con iscrizione scaduta
+	 */
 	public ArrayList<Fruitore> utentiScaduti(){
 		
 		ArrayList<Fruitore> scaduti=new ArrayList();
@@ -65,10 +76,15 @@ public class ArrayFruitore implements Serializable {
 		return scaduti;
 	}
 	
+	
+	/**
+	 * rimuove dall'array dei fruitori quelli con l'iscrizione scaduta
+	 * @param scaduti l'array di utenti da rimuovere
+	 */
 	public void rimuoviIscrizioni(ArrayList<Fruitore> scaduti){
 		
 		for(Fruitore fruitore: scaduti)
-			scaduti.remove(fruitore);
+			fruitori.remove(fruitore);
 			
 		/*if(!fruitori.isEmpty()) {
 			for (int i=0; i<fruitori.size(); i++){
@@ -84,7 +100,9 @@ public class ArrayFruitore implements Serializable {
 		
 	}
 
-	
+	/**
+	 * Stampa la lista dei fruitori attuali
+	 */
 	public void stampaFruitori(){
 		
 		for(int i = 0; i<fruitori.size(); i++)
@@ -92,30 +110,27 @@ public class ArrayFruitore implements Serializable {
 			fruitori.get(i).stampaFruitore();
 		}
 	}
-	
-	
+
+	/**
+	 * controlla se un userName e' gia' in uso
+	 * @param user l'userName da verificare
+	 * @return false se disponibile, true altrimenti
+	 */
 	public boolean checkUsername(String user) {
-		
-			
+					
 		if(fruitori.size()==0)  return true;
 		for(int i = 0; i<fruitori.size(); i++) {
 			if(fruitori.get(i).getUsername().equals(user)) 
 				return false;
 		}
 		return true;
-		
 	}
 
 	
-	
+	//Getter
 	public ArrayList<Fruitore> getFruitori() {
 		return fruitori;
 	}
 
-
-	public void setFruitori(ArrayList<Fruitore> fruitori) {
-		this.fruitori = fruitori;
-	}
-	
 	
 }

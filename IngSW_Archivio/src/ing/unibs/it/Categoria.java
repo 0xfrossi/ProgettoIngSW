@@ -20,7 +20,7 @@ public  class Categoria extends Risorsa implements Serializable{
 	private ArrayList<Risorsa> arrayRisorse=new ArrayList<Risorsa>();;
 	
 	/**
-	 * Costruttore vuoto
+	 * Costruttore default
 	 */
 	public Categoria () {	
 	}
@@ -30,7 +30,7 @@ public  class Categoria extends Risorsa implements Serializable{
 	/**
 	 * Controlla se una risorsa e' gia' presente attraverso un codice
 	 * @param r la risorsa per la quale verificare l'esistenza
-	 * @return true se esiste già in archivio
+	 * @return true se esiste giï¿½ in archivio
 	 *		   false altrienti
 	 */
 	public boolean checkRisorsa(Risorsa r) {
@@ -43,7 +43,8 @@ public  class Categoria extends Risorsa implements Serializable{
 		if(check==true)
 			return true;
 		
-		else return false;
+		else 
+			return false;
 	}
 	
 	/**
@@ -73,7 +74,7 @@ public  class Categoria extends Risorsa implements Serializable{
 		}
 		else {
 			
-	//Controllo che non esista già
+	//Controllo che non esista giï¿½
 			for(int i=0; i<arrayRisorse.size();i++) {
 				if(arrayRisorse.get(i).getCodiceUnivoco()==r.getCodiceUnivoco()) {
 					ok=true;
@@ -90,7 +91,7 @@ public  class Categoria extends Risorsa implements Serializable{
 		}	
 
 	/**
-	 * verifica se una risorsa è gia' stata inserita in una sottocategoria
+	 * verifica se una risorsa ï¿½ gia' stata inserita in una sottocategoria
 	 * @param codice il codice della risorsa da verificare
 	 * @return true se esiste gia' false altriementi
 	 */
@@ -110,40 +111,35 @@ public  class Categoria extends Risorsa implements Serializable{
 	 */
 	public void removePerNome(int codice) {
 		
-		ArrayList<Integer> segnaPosti = new ArrayList();
-		
-		for (int i = 0; i <arrayRisorse.size(); i++) 
-			
-		{
-			if(arrayRisorse.get(i).getCodiceUnivoco()==codice)
-			{
-				segnaPosti.add(i);
+		boolean rimuovere=false;
+		int indice=-1;
+		for (int i = 0; i <arrayRisorse.size(); i++){
+			if(arrayRisorse.get(i).getCodiceUnivoco()==codice) {
+				rimuovere=true;
+				indice=i;
 			}
 		}
 		/*if(posizioni.size()==0)
 		{
 			System.out.println("Siamo spiacenti, il libro non e' presente nell'archivio");
 		}*/
-		 if(segnaPosti.size()==1)
-		{
-			arrayRisorse.remove((int)segnaPosti.get(0));
-			System.out.println("Rimozione avvenuta con successo!");
-		}
+		 if(rimuovere && indice !=-1 ){
+			arrayRisorse.remove(indice);
+			System.out.println(Costanti.RIMOZIONE_OK);
+		 }
 		
-		}	
+	}	
 	
 	/**
 	 * Visualizza le risorse inserite			
 	 */
 	public void stampaDesc() {
 		
-			for(int i=0;i<arrayRisorse.size();i++)
-			{
+			for(int i=0;i<arrayRisorse.size();i++){
 				
 				System.out.println();
 				arrayRisorse.get(i).stampaDesc();
 				System.out.println();
-		
 			}
 	}
 	

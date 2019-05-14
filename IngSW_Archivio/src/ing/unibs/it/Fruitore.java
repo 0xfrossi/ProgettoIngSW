@@ -7,9 +7,7 @@ import util.Unibs.MyUtil;
 
 public class Fruitore implements Serializable {
 
-	/**
-	 *  
-	 */
+	
 	
 	//Dichiarazione attributi
 	
@@ -26,7 +24,7 @@ public class Fruitore implements Serializable {
 	private String  password;
 	
 	/**
-	 * Metodo Costruttore
+	 * Costruttore
 	 * @param nome il nome del fruitore
 	 * @param cognome il cognome del fruitore
 	 * @param DataDiNascita la data di nascita del fruitore
@@ -80,7 +78,7 @@ public class Fruitore implements Serializable {
  	
  	
  	 /**
- 	  * Mi da informazioni sulla possibilità di eseguire il rinnovo quel giorno
+ 	  * Mi da informazioni sulla possibilita' di eseguire il rinnovo quel giorno
  	  */
  	private boolean statoRinnovo() {
  		
@@ -120,7 +118,7 @@ public class Fruitore implements Serializable {
  	 
  	 
  	 /**
- 	  * Stampa i dati del friotore
+ 	  * Stampa i dati del fruitotore
  	  */
  	 public void stampaFruitore() {
  		System.out.println(Costanti.STAMPA_NOME + nome);

@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.util.GregorianCalendar;
 import util.Unibs.MyUtil;
 
+/**
+ * Classe  le cui istanze associano un fruitore ad una risorsa, creando la relazione di "prestito"
+ * @author Francesco Rossi
+ *
+ */
 public class Prestito implements Serializable  {
 	
 	//Attributi
@@ -44,22 +49,24 @@ public class Prestito implements Serializable  {
 		dataRichiestaProroga.add(GregorianCalendar.DAY_OF_MONTH, risorsa.getGiorniPrimaPerProroga());
 		prorogaOk = false;		
 	}*/
+	
+	
 	/**
 	 * Visualizza i dati del prstito
 	 */
 	public void stampaPrestito(){
 		
 		System.out.println("Categoria: " + risorsa.getClass().getSimpleName());
-		System.out.println("Titolo: " + risorsa.getNome());
-		System.out.println("Fruitore: " + fruitore.getUsername());
-		System.out.println("Data prestito: " + MyUtil.toStringData(dataInizioPrestito));
-		System.out.println("Data scadenza: " + MyUtil.toStringData(dataFinePrestito));
+		System.out.println(Costanti.TITOLO+ risorsa.getNome());
+		System.out.println(Costanti.FRUITORE + fruitore.getUsername());
+		System.out.println(Costanti.INIZIO_PRESTITO + MyUtil.toStringData(dataInizioPrestito));
+		System.out.println(Costanti.FINE_PRESTITO + MyUtil.toStringData(dataFinePrestito));
 		
 		if(!prorogaOk)
-			System.out.println("Rinnovo (1 sola volta) disponibile dal: " + MyUtil.toStringData(dataRichiestaProroga));
+			System.out.println(Costanti.OK_RINNOVO_DAL + MyUtil.toStringData(dataRichiestaProroga));
 		
 		else
-			System.out.println("Prestito non rinnovabile");
+			System.out.println(Costanti.NO_RINNOVO);
 		
 	}
 	/**
@@ -74,9 +81,9 @@ public class Prestito implements Serializable  {
 				setProrogaOk(true);
 			}
 		else if(getProrogaOk()==true)
-			System.out.println("proroga gia'concessa, prestito non piu' rinnovabile ");
+			System.out.println(Costanti.NO_PROROGA);
 		else
-			System.out.println("prestito non ancora rinnovabile ");
+			System.out.println(Costanti.NO_RINNOVABILE);
 			
 	}
 	

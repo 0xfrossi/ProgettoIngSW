@@ -1,9 +1,7 @@
 package ing.unibs.it;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-
 import util.Unibs.MyIOFile;
 import util.Unibs.MyMenu;
 import util.Unibs.MyUtil;
@@ -17,19 +15,20 @@ public class Main {
 		ArrayList<Fruitore> utentiScaduti;
 		GestioneMenu menu= new GestioneMenu();
 		
+		//contollo lo stato delle iscrizioni dei fruitori, in caso li rimuovo dal sistema
+		// e rimuovo anche gli evenuali prestiti sottoscritti da essi
 		try {
-			
-				
-		utentiScaduti= menu.getFruitori().utentiScaduti();			
-		menu.getFruitori().rimuoviIscrizioni(utentiScaduti);
-		menu.getPrestiti().annullaPrestitiUtenti(utentiScaduti);
-		menu.getPrestiti().checkPrestiti();
-		ServizioFile.salvaSingoloOggetto(menu.getFile(), menu.getFruitori(), false);
-		ServizioFile.salvaSingoloOggetto(menu.getFilePrestiti(), menu.getPrestiti(), false);
+					
+			utentiScaduti= menu.getFruitori().utentiScaduti();			
+			menu.getFruitori().rimuoviIscrizioni(utentiScaduti);
+			menu.getPrestiti().annullaPrestitiUtenti(utentiScaduti);
+			menu.getPrestiti().checkPrestiti();
+			ServizioFile.salvaSingoloOggetto(menu.getFile(), menu.getFruitori(), false);
+			ServizioFile.salvaSingoloOggetto(menu.getFilePrestiti(), menu.getPrestiti(), false);
 		
 		}catch(Exception e) {
 			e.printStackTrace();
-		}
+			}
 		
 		
 		MyMenu menuFinale= new MyMenu(Costanti.TITOLO_PRINCIPALE, Costanti.SCELTE_PRINCIP);

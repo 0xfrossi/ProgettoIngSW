@@ -1,15 +1,17 @@
 package ing.unibs.it;
 
 import java.io.File;
-
-import myLib.ServizioFile;
 import util.Unibs.MyIOFile;
 import util.Unibs.MyMenu;
 import util.Unibs.MyUtil;
 import util.Unibs.*;
 
 
-
+/**
+ * Classe  che contiene le interfacce, utente/fruitore
+ * @author Francesco Rossi
+ *
+ */
 public class GestioneMenu {
 	
 	private Fruitore fruitore;
@@ -156,7 +158,9 @@ public class GestioneMenu {
 	
 	
 	
-	
+	/**
+	 * Stampa la lista dei fruitori attuali
+	 */
 	private void listaFruitori() {
 		if(!fruitori.getFruitori().isEmpty())
 			fruitori.stampaFruitori();
@@ -166,7 +170,14 @@ public class GestioneMenu {
 	
 
 	
-	
+	/**
+	 * Menu' che gestisce le scelte principali di un utente, contiene:
+	 * *rinnovoIscrizione()
+	 * *stamapaFruitore()
+	 * *cercaLibro()
+	 * *gestionePrestitiFruitore()
+	 * 
+	 */
 	private void sottoFruitore() {
 		MyMenu sottoFruitore = new MyMenu(Costanti.COSA_,Costanti.SCELTE_SOTTO_FRUITORE);{
 		boolean finito = false;
@@ -201,9 +212,17 @@ public class GestioneMenu {
 			} 	while(!finito);	
 		}
 			
-	}	
+	}
 	
+	/**
+	 * SottoMenu' dell'interfaccia fruitore che permette operazioni sui prestiti,contiene:
+	 * *chiediPrestito()
+	 * *rinnovaPrestito()
+	 * *stampaPrestitiUtente()
+	 * *annullaPrestitoRisorsa()
+	 */
 	private void gestionePrestitiFruitore() {
+		
 		MyMenu sottoPrestitiFruitore = new MyMenu(Costanti.COSA_,Costanti.SCELTE_PRESTITO_FRUITORE);{
 			boolean finito = false;
 					
@@ -246,40 +265,44 @@ public class GestioneMenu {
 	
 	
 	
-	
+	/**
+	 * Permette di chiedere un libro in prestito, previo controlli sul num di libri gia' in prestito
+	 */
 	private void chiediIlPrestito(){
 		
 		if(prestiti.contaPrestitiUtente(getFruitore().getUsername(), "Libri") == libro.getPrestitiMax())
 		
-			System.out.println("Operazione non disponibile, hai gia'in prestito il numero di risorse massime per la categoria Libri ");
+			System.out.println(Costanti.LIBRI_MAX);
 		
 		else{
-			Libro libro = (Libro) libri.scegliPerNome(MyUtil.leggiStringaNonVuota("Inserisci il titolo del libro che richiedi in prestito: "));
+			Libro libro = (Libro) libri.scegliPerNome(MyUtil.leggiStringaNonVuota(Costanti.INS_TITOLO_PRESTITO));
 			
 			if(libro != null){
 				if(prestiti.prestitoNotExist(getFruitore(), libro)){
 					prestiti.addPrestito(getFruitore(), libro);
-					System.out.println(libro.getNome() + "prenotazione avvenuta con successo!");
+					System.out.println(Costanti.PRENOTAZIONE_OK);
 				}
 				else
-					System.out.println("Hai gia' il libro chiesto ");
-				
+					System.out.println(Costanti.LIBRO_POSSEDUTO);	
 			}
 //			qui libro==null
 		}
+		
 		ServizioFile.salvaSingoloOggetto(filePrestiti, prestiti, false);
 		ServizioFile.salvaSingoloOggetto(fileLibri, libri, false);
-		
-		
+
 	}
 		
 	
 	
 	
-	
+	/**
+	 * Menu' lato operatore per la gestione dei prestiti, contiene:
+	 * *visualizzaPrestitiAttivi()
+	 */
 	private void gestionePrestitiOperatore() {
 		
-		MyMenu sottoOperatorePrestiti = new MyMenu("Gestisci i prestiti: ",Costanti.SCELTE_SOTTO_LIBRI);{
+		MyMenu sottoOperatorePrestiti = new MyMenu(Costanti.GESTISCI_PRESTITI,Costanti.SCELTE_SOTTO_LIBRI);{
 			boolean finito = false;
 					
 				do{
@@ -304,6 +327,12 @@ public class GestioneMenu {
 			}
 	}
 	
+	/**
+	 * Sotto Menu' che contiene le operazioni sui libri da parte dell'operatore, contiene:
+	 * *inerisciLibroInSottoCat()
+	 * *removeLibro()
+	 * *visualizzaLibri()
+	 */
 	private void gestioneLibri() {
 		MyMenu sottoOperatoreLibri = new MyMenu(Costanti.MENU_LIBRI,Costanti.SCELTE_SOTTO_LIBRI);{
 			boolean finito = false;
@@ -356,6 +385,9 @@ public class GestioneMenu {
 		
 	}
 	
+	/**
+	 * Crea una nuova istanza di libro e permette di scegliere in che sotto categoria inserirlo
+	 */
 	private void inserisciLibroInSottocat() {
 		
 			libro=new Libro(MyUtil.leggiStringaNonVuota(Costanti.INS_TITOLO),MyUtil.leggiIntero(Costanti.INS_CODICE),MyUtil.leggiInteroConMinimo(Costanti.INS_NLIC, 1), MyUtil.inserisciAutori(),MyUtil.leggiIntero(Costanti.INS_NPAGINE), 
@@ -391,8 +423,11 @@ public class GestioneMenu {
 			}
 		}
 	
-	
+	/**
+	 * scegli la sotto categoria di cui vuoi visualizzare i libri 
+	 */
 	private void visualizzaLibri() {
+		
 		MyMenu visualizzaLibri = new MyMenu(Costanti.COSA_,Costanti.SCELTE_VISUALIZZ);{
 		boolean finito = false;
 				
@@ -428,82 +463,49 @@ public class GestioneMenu {
 	}	
 	
 	
+	//Getters & Setters
 	
 	public Fruitore getFruitore() {
 		return fruitore;
 	}
 
-
-
-
-
 	public void setFruitore(Fruitore fruitore) {
 		this.fruitore = fruitore;
 	}
 
-
-
-
-
 	public ArrayFruitore getFruitori() {
 		return fruitori;
 	}
-
-
-
-
 
 	public void setFruitori(ArrayFruitore fruitori) {
 		this.fruitori = fruitori;
 	}
 
 
-
-
-
 	public File getFile() {
 		return file;
 	}
-
-
-
 
 	public File getFileLibri() {
 		return fileLibri;
 	}
 
-
-
-
 	public File getFilePrestiti() {
 		return filePrestiti;
 	}
 
-
-
-
 	public Libri getLibri() {
 		return libri;
 	}
-
-
-
 
 	public Libro getLibro() {
 		return libro;
 	}
 
 
-
-
 	public ArrayPrestito getPrestiti() {
 		return prestiti;
 	}
-
-
-	
-
-
 	
 }
 

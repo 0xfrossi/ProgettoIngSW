@@ -2,6 +2,10 @@ package ing.unibs.it;
 
 public class Costanti {
 	
+	public static final int GIORNI_DURATA_PRESTITO = 30;
+	public static final int GIORNI_DURATA_PROROGA = 30;
+	public static final int GIORNI_PRIMA_PER_PROROGA = -5;
+	public static final int PRESTITI_MAX = 3;
 	
 	public static final String INS_CODICE ="Inserisci il codice univoco associato: ";
 	public static final String CODICE = "Codice univoco: ";
@@ -34,7 +38,7 @@ public class Costanti {
 	public static final String COM_NON_RIC="comando non riconosciuto";
 	public static final String NESSUN_FRUIT="Nessun Fruitore registrato";
 	public static final String PASS_ERRATA="Password errata";
-	public static final String RIUSCITA="\nIscrizione Riuscita!";
+	public static final String RIUSCITA="\n Operazione Riuscita!";
 	public static final String USER_NN_DISP="Username non disponibile";
 	public static final String ACCESSO_OK="Accesso eseguito";	
 	
@@ -63,4 +67,38 @@ public class Costanti {
 	
 	public static final String[] SCELTE_PRESTITO_FRUITORE={"Chiedi un prestito", "Rinnova un prestito","I miei prestiti ","Annulla il prestito di un libro "};
 	public static final String[] SCELTE_RICERCA_LIBRI={"Cerca per titolo o per parola contenuta in esso", "Cerca per autore"};
+	public static final String PRENOTAZIONE_OK= "prenotazione avvenuta con successo!";
+	public static final String	LIBRO_POSSEDUTO="Hai gia' il libro chiesto ";
+	public static final String GESTISCI_PRESTITI="Gestisci i prestiti: ";
+	public static final String INS_TITOLO_PRESTITO="Inserisci il titolo del libro che richiedi in prestito: ";
+	public static final String RISORSA_PRESENTE="Risorsa gia' presente";
+	public static final String ARCHIVIO_VUOTO="L'Archivio e' vuoto \n";
+	public static final String LIBRO_NON_PRESENTE="Il libro non e' presente nell'archivio";
+	public static final String INS_AUTORE="Inserisci l'autore: ";
+	public static final String LINGUA_ITA="Lingua italiana";
+	public static final String LINGUA_ING="Lingua inglese";
+	public static final String CERCA_PER_TITOLO="Inserisci il titolo (o parte di esso) che cerchi: ";
+	public static final String LIBRO_NON_TROVATO="Nessun libro trovato";
+	public static final String SELEZIONA_LIBRO_PRESTITO="Seleziona il libro che vuoi ricevere in prestito";
+	public static final String COPIE_GIA_INPRESTITO="Tutte le copie sono gia' in prestito";
+	public static final String RIMOZIONE_OK="Rimozione avvenuta con successo!";
+	public static final String NO_PRESTITI_ATTIVI="Al momento non sono presenti prestiti attivi";
+	public static final String SELEZIONA="\n Seleziona: ";
+	public static final String NO_PRESTITI_RINNOVI="Non ci sono prestiti da rinnovare";
+	public static final String PRESTITO_ANNULLATO="Prestito annullato ";
+	public static final String NO_PROROGA="proroga gia'concessa, prestito non piu' rinnovabile ";
+	public static final String NO_RINNOVABILE="prestito non ancora rinnovabile ";
+	public static final String CATEGORIA="Categoria: ";
+	public static final String FRUITORE="Fruitore: ";
+	public static final String INIZIO_PRESTITO="Data inizio prestito";
+	public static final String FINE_PRESTITO="Data fine prestito";
+	public static final String NO_RINNOVO="Prestito non rinnovabile";
+	public static final String OK_RINNOVO_DAL="Rinnovo (1 sola volta) disponibile dal: ";
+	public static final String REGISTA="Regista: ";
+	public static final String ATTORI="Attori: ";
+	public static final String MOSTRA_PRESTITI="Ecco i tuoi prestiti: ";
+	public static final String FILM_NON_PRESENTE="Il film non e' presente nell'archivio";
+	public static final String LIBRI_MAX="Operazione non disponibile, hai gia'in prestito il numero di risorse massime per la categoria Libri ";
 }
+
+

@@ -7,23 +7,15 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import util.Unibs.MyUtil;
 
+
+
+/**
+ * Classe che definisce la Risorsa Libro
+ * @author Francesco Rossi
+ *
+ */
 public class Libro  extends Risorsa implements Serializable {
 	
-	public static final int GIORNI_DURATA_PRESTITO = 30;
-	/**
-	 *  durata proroga del prestito di un Libro
-	 */
-	public static final int GIORNI_DURATA_PROROGA = 30;
-	
-	/**
-	 *da che giorno e'possibile chiedere la proroga del prestito del Libro
-	 */
-	public static final int GIORNI_PRIMA_PER_PROROGA = -5;
-	
-	/**
-	 * quanti Libri possono essere in prestito contemporaneamente dalla stessa persona
-	 */
-	public static final int PRESTITI_MAX = 3;
 	
 	//Attributi
 	
@@ -75,6 +67,7 @@ public class Libro  extends Risorsa implements Serializable {
 		System.out.println(Costanti.GENERE+ getGenere());
 		System.out.println(Costanti.CODICE+ getCodiceUnivoco());
 		System.out.print(Costanti.AUTORI);
+		
 		for(int i = 0; i < autori.size(); i++){
 			System.out.print(" " + autori.get(i));
 			if(i < autori.size()-1)
@@ -169,9 +162,6 @@ public class Libro  extends Risorsa implements Serializable {
 	}
 
 	
-	/**
-	 * precondizione: ci sono copie del Libro disponibili per il prestito
-	 */
 	@Override
 	public void inizioPrestito(){
 		inPrestito++;
@@ -184,22 +174,22 @@ public class Libro  extends Risorsa implements Serializable {
 
 	@Override
 	public int getGiorniDurataPrestito() {
-		return Libro.GIORNI_DURATA_PRESTITO;
+		return Costanti.GIORNI_DURATA_PRESTITO;
 	}
 
 	@Override
 	public int getGiorniDurataProroga() {
-		return Libro.GIORNI_DURATA_PROROGA;
+		return Costanti.GIORNI_DURATA_PROROGA;
 	}
 
 	@Override
 	public int getGiorniPrimaPerProroga() {
-		return Libro.GIORNI_PRIMA_PER_PROROGA;
+		return Costanti.GIORNI_PRIMA_PER_PROROGA;
 	}
 
 	@Override
 	public int getPrestitiMax() {
-		return Libro.PRESTITI_MAX;
+		return Costanti.PRESTITI_MAX;
 	}
 
 

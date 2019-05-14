@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 
 /**
- * Classe astratta che definisce la risorsa, un elemento base
+ * Classe astratta che definisce la risorsa, un elemento generico
  * @author Francesco Rossi
  *
  */
@@ -20,20 +20,30 @@ public abstract class Risorsa implements Serializable, Loanable {
 		
 	}
 	
+	/**
+	 * Stampa i dati caratterizzanti una risorsa
+	 */
+	public  abstract void stampaDesc();
+	
+	/**
+	 * Aggiunge una risorsa in una lista
+	 * @param c la risorsa da aggiungere
+	 */
+	public  abstract void add(Risorsa c);
+	
+	/**
+	 * rimuove una risorsa da una lista
+	 * @param c la risorsa da rimuovere
+	 */
+	public  abstract void remove(Risorsa c);
+	
+	//Getters da sovrascrivere
+	
 	public abstract  int getCodiceUnivoco();
 	
 	public abstract String getNome();
 	
-	public  abstract void stampaDesc();
-	
-	public  abstract void add(Risorsa c);
-	
-	public  abstract void remove(Risorsa c);
-	
 	public  abstract ArrayList<String> getAutori();
 	
 	public abstract int getNumLicenze();
-	
-	
-	
 }

@@ -1,5 +1,6 @@
 package ing.unibs.it;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import java.util.GregorianCalendar;
@@ -12,9 +13,10 @@ import util.Unibs.MyUtil;
  * @author Francesco Rossi
  *
  */
-public class ArrayPrestito {
+public class ArrayPrestito implements Serializable {
 	
 	//Attributi
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Prestito> prestiti;
 	
 	
@@ -24,8 +26,6 @@ public class ArrayPrestito {
 	public ArrayPrestito() {
 		prestiti= new ArrayList<Prestito>();
 	}
-	
-	
 	
 	
 	/**
@@ -114,7 +114,7 @@ public class ArrayPrestito {
 	 */
 	public void stampaPrestitiAttivi(){
 		if(prestiti.isEmpty()) 
-			System.out.println("Al momento non sono presenti prestiti attivi");
+			System.out.println(Costanti.NO_PRESTITI_ATTIVI);
 		
 		else{
 			for(int i=0;i<prestiti.size();i++) {
@@ -157,7 +157,7 @@ public class ArrayPrestito {
 			}
 		}
 		
-		selezionato = MyUtil.leggiIntero("\n Seleziona: ", 1, prestiti.size());		
+		selezionato = MyUtil.leggiIntero(Costanti.SELEZIONA, 1, prestiti.size());		
 		Prestito prestitoSelezionato = prestiti.get(selezionato-1);
 		return prestitoSelezionato;
 	}
@@ -168,10 +168,10 @@ public class ArrayPrestito {
 	public void rinnovaPrestito(Fruitore fruitore){
 		//int numRisorsa;
 		if(prestiti.isEmpty())
-			System.out.println("Non ci sono prestiti da rinnovare");
+			System.out.println(Costanti.NO_PRESTITI_RINNOVI);
 
 		else{
-			System.out.println("Ecco i tuoi prestiti: ");
+			System.out.println(Costanti.MOSTRA_PRESTITI);
 			
 			/*for(int i = 0; i < prestiti.size(); i++){
 				System.out.println((i+1)+".");
@@ -199,16 +199,22 @@ public class ArrayPrestito {
 		}
 	}
 	
+	
+	/**
+	 * Annulla il prestito di una certa risorsa
+	 * @param fruitore il fruitore associato al prestito
+	 * @param risorsaDaAnnullare la risorsa per la quale chiedo l'annullamento
+	 */
 	public void annullaPrestitoRisorsa(Fruitore fruitore, Risorsa risorsaDaAnnullare) {
 		 if(prestitoNotExist(fruitore, risorsaDaAnnullare))
-			 System.out.println("Nessun prestito attivo");
+			 System.out.println(Costanti.NO_PRESTITI_ATTIVI);
 		 else {
 			
 			for(int i = prestiti.size()-1; i >= 0; i--){
 				if(prestiti.get(i).getFruitore().getUsername().equals(fruitore.getUsername()) && prestiti.get(i).getRisorsa().getCodiceUnivoco()==risorsaDaAnnullare.getCodiceUnivoco()){
 					prestiti.get(i).getRisorsa().finePrestito();
 					prestiti.remove(i);
-					System.out.println("i tuoi prestiti sono stati eliminati");
+					System.out.println(Costanti.PRESTITO_ANNULLATO);
 				}
 			}
 		 }
@@ -222,20 +228,14 @@ public class ArrayPrestito {
 	 * @param utente l'utente a cui elimino tutti i prestiti
 	 */
 	public void annullaPrestitiUtente(Fruitore utente) {		
-		boolean rimosso=false;
+		
 		for(int i = prestiti.size()-1; i >= 0; i--){
 			if(prestiti.get(i).getFruitore().getUsername().equals(utente.getUsername())){
 				
 				prestiti.get(i).getRisorsa().finePrestito();
 				prestiti.remove(i);
-				rimosso=true;
 			}
 		}
-		if(rimosso==false)
-			System.out.println("Al momento non hai prestiti attivi");
-		
-		else
-			System.out.println("i tuoi prestiti sono stati eliminati");
 		
 	}	
 	
