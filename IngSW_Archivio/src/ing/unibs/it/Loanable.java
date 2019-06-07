@@ -20,7 +20,7 @@ public interface Loanable {
 	 */
 	public abstract void finePrestito();
 	
-	//Getters da sovrascrivere
+	//Getters da sovrascrivere 
 	public abstract GregorianCalendar getDataInizioPrestito() ;
 	public abstract GregorianCalendar getDataFinePrestito() ;
 	public abstract GregorianCalendar getDataRichiestaProroga();
@@ -30,6 +30,5 @@ public interface Loanable {
 	public abstract int getGiorniDurataProroga();
 	public abstract int getGiorniPrimaPerProroga();
 	public abstract int getPrestitiMax();
-
 	
 }

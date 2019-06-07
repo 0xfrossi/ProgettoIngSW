@@ -31,6 +31,7 @@ public class Libro  extends Risorsa implements Serializable {
 	private int inPrestito;
 	
 	
+	
 	 /** Costuttore 
 	 
 	  *@param nLicenze il numero di licenze disponibili
@@ -241,6 +242,16 @@ public class Libro  extends Risorsa implements Serializable {
 		// TODO Auto-generated method stub
 		
 	}
+
+
+	@Override
+	public ArrayList<String> getAttori() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	
 
 	
 	

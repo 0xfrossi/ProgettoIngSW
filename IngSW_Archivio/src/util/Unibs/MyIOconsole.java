@@ -2,12 +2,7 @@ package util.Unibs;
 
 import java.util.Scanner;
 
-/**
- * classe che mette a disposizone metodi per l'I/O di vari tipi di dato.
- * 
- * @author Tiziano Fapanni, Andrea Simaz
- *
- */
+
 
 public class MyIOconsole {
 

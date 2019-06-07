@@ -1,10 +1,9 @@
 package ing.unibs.it;
 
-import java.io.File;
+
+
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
-
 import util.Unibs.MyUtil;
 
 
@@ -65,15 +64,15 @@ public class ArrayFruitore implements Serializable {
 		ArrayList<Fruitore> scaduti=new ArrayList();
 		if(!fruitori.isEmpty()) {
 			for (int i=0; i<fruitori.size(); i++){
-			
-			fruitori.get(i).ControlloDecadenzaFruitore();
-			if(!fruitori.get(i).isStatoFruitore())
-				scaduti.add(fruitori.get(i));
+				fruitori.get(i).ControlloDecadenzaFruitore();
 				
+				if(!fruitori.get(i).getStatoFruitore())
+					scaduti.add(fruitori.get(i));	
 			}
-			
 		}
 		return scaduti;
+		
+	
 	}
 	
 	

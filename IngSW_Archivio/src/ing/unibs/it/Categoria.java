@@ -17,7 +17,8 @@ public  class Categoria extends Risorsa implements Serializable{
 	
 	//Attributi
 	private static final long serialVersionUID = 1L;
-	private ArrayList<Risorsa> arrayRisorse=new ArrayList<Risorsa>();;
+	private ArrayList<Risorsa> arrayRisorse=new ArrayList<Risorsa>();
+	private ArrayList<Risorsa> risorseRimosse=new ArrayList<Risorsa>();
 	
 	/**
 	 * Costruttore default
@@ -37,7 +38,7 @@ public  class Categoria extends Risorsa implements Serializable{
 		boolean check=false;
 	
 		for(int i=0; i<arrayRisorse.size();i++) {
-			if(arrayRisorse.get(i).getCodiceUnivoco()==r.getCodiceUnivoco())
+			if(arrayRisorse.get(i).getCodiceUnivoco()==r.getCodiceUnivoco() )
 				check=true;
 		}
 		if(check==true)
@@ -54,8 +55,8 @@ public  class Categoria extends Risorsa implements Serializable{
 	public ArrayList<Risorsa> arrayUniforme(){
 		
 		ArrayList<Risorsa> tutti=new ArrayList<>();
-		for(int i=0; i<arrayRisorse.size();i++) 
-			tutti.add(arrayRisorse.get(i));
+		for(int i=0; i<arrayRisorse.size();i++)
+				tutti.add(arrayRisorse.get(i));
 		return tutti;
 	}
 	
@@ -74,7 +75,6 @@ public  class Categoria extends Risorsa implements Serializable{
 		}
 		else {
 			
-	//Controllo che non esista gi�
 			for(int i=0; i<arrayRisorse.size();i++) {
 				if(arrayRisorse.get(i).getCodiceUnivoco()==r.getCodiceUnivoco()) {
 					ok=true;
@@ -91,14 +91,14 @@ public  class Categoria extends Risorsa implements Serializable{
 		}	
 
 	/**
-	 * verifica se una risorsa � gia' stata inserita in una sottocategoria
+	 * verifica se una risorsa e' gia' stata inserita in una sottocategoria
 	 * @param codice il codice della risorsa da verificare
 	 * @return true se esiste gia' false altriementi
 	 */
 	public boolean esisteInSotto(int codice) {
 		
 		for(int i=0; i<arrayRisorse.size();i++) {
-			if(arrayRisorse.get(i).getCodiceUnivoco()==codice)
+			if(arrayRisorse.get(i).getCodiceUnivoco()==codice )
 				return true;
 		}	
 		return false;
@@ -119,12 +119,12 @@ public  class Categoria extends Risorsa implements Serializable{
 				indice=i;
 			}
 		}
-		/*if(posizioni.size()==0)
-		{
-			System.out.println("Siamo spiacenti, il libro non e' presente nell'archivio");
-		}*/
+	
 		 if(rimuovere && indice !=-1 ){
+			 
+			risorseRimosse.add(arrayRisorse.get(indice));
 			arrayRisorse.remove(indice);
+
 			System.out.println(Costanti.RIMOZIONE_OK);
 		 }
 		
@@ -137,9 +137,10 @@ public  class Categoria extends Risorsa implements Serializable{
 		
 			for(int i=0;i<arrayRisorse.size();i++){
 				
-				System.out.println();
-				arrayRisorse.get(i).stampaDesc();
-				System.out.println();
+					System.out.println();
+					arrayRisorse.get(i).stampaDesc();
+					System.out.println();
+				
 			}
 	}
 	
@@ -166,7 +167,13 @@ public  class Categoria extends Risorsa implements Serializable{
 	
 	
 	
-	//GETTER
+	//GETTERS
+	//Override di alcuni metodi non usati
+
+	
+	public ArrayList<Risorsa> getRisorseRimosse() {
+		return risorseRimosse;
+	}
 
 	public ArrayList<Risorsa> getArrayRisorse() {
 		return arrayRisorse;
@@ -265,10 +272,12 @@ public  class Categoria extends Risorsa implements Serializable{
 	}
 
 
-	
 
-	
-
+	@Override
+	public ArrayList<String> getAttori() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	
 	

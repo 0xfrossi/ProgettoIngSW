@@ -1,6 +1,8 @@
 package ing.unibs.it;
 
 import java.io.File;
+
+
 import util.Unibs.MyIOFile;
 import util.Unibs.MyMenu;
 import util.Unibs.MyUtil;
@@ -15,30 +17,42 @@ import util.Unibs.*;
 public class GestioneMenu {
 	
 	private Fruitore fruitore;
-	private ArrayFruitore fruitori;
+	private static ArrayFruitore fruitori;
 	private File file ;
 	private File fileLibri ;
 	private File filePrestiti;
-	private Libri libri;
-	private Libro libro;
-	private ArrayPrestito prestiti;
+	private static Libri libri;
+	private Risorsa libro;
+	private static ArrayPrestito prestiti;
+	private Risorsa film;
+	private static Films films;
+	private File fileFilms;
+	private LogsDati logs;
+	private File fileLogs;
 	
 	
 	/**
 	 * Costruttore che inizializza gli attributi,legge gli oggetti salvati su file e li carica
 	 */
 	public GestioneMenu() {
+		
 		fruitori=new ArrayFruitore();
 		libri= new Libri();
 		prestiti= new ArrayPrestito();
+		films= new Films();
 		file= new File("fruitori.txt");
 		fileLibri= new File("libri.txt");
 		filePrestiti= new File("prestiti.txt");
+		fileFilms= new File("films.txt");
+		fileLogs= new File("logs.txt");
+		logs= LogsDati.getIstance();
 		
 		try {
 			ServizioFile.checkFile(file, fruitori);
 			ServizioFile.checkFile(fileLibri, libri);
 			ServizioFile.checkFile(filePrestiti, prestiti);
+			ServizioFile.checkFile(fileFilms, films);
+			ServizioFile.checkFile(fileLogs, logs);
 			/*if(file.length()!=0)
 				fruitori=(ArrayFruitore)MyIOFile.leggiOggetto(file);
 			
@@ -54,6 +68,9 @@ public class GestioneMenu {
 		fruitori = (ArrayFruitore)ServizioFile.caricaSingoloOggetto(file);
 		libri = (Libri)ServizioFile.caricaSingoloOggetto(fileLibri);
 		prestiti= (ArrayPrestito) ServizioFile.caricaSingoloOggetto(filePrestiti);
+		films =(Films) ServizioFile.caricaSingoloOggetto(fileFilms);
+		logs= (LogsDati) ServizioFile.caricaSingoloOggetto(fileLogs);
+		reloadArrayPrestiti();
 	}
 	
 	/**
@@ -69,9 +86,11 @@ public class GestioneMenu {
 		int scelta=menuPrincipale.scegli();
 		
 		switch(scelta){
+		
 		case 0: //esci
 			finito=true;
 			break;
+			
 		case 1: //iscrizione
 			try {
 				
@@ -82,8 +101,9 @@ public class GestioneMenu {
 			
 				/*if(!file.exists()) {
 					 file = new File("fruitori.txt");*/
-				
+				logs.addInFruitori(fruitore);
 				MyIOFile.scriviOggetto(file, fruitori);
+				MyIOFile.scriviOggetto(fileLogs, logs);
 				
 			} catch (Exception e) { 
 				e.printStackTrace();	
@@ -99,7 +119,7 @@ public class GestioneMenu {
 				for(int i=0; i< fruitori.getFruitori().size();i++) {
 					if(user.equals(fruitori.getFruitori().get(i).getUsername()) && pass.equals(fruitori.getFruitori().get(i).getPassword())){
 						System.out.println(Costanti.ACCESSO_OK);		
-						sottoFruitore();
+						sottoFruitore(fruitori.getFruitori().get(i));
 								
 					}	
 				System.out.println(Costanti.CREDENZIALI_NO);
@@ -122,6 +142,7 @@ public class GestioneMenu {
 	 * *listaFruitori()
 	 * *gestioneLibri()
 	 * *gestionePrestitiOperatore()
+	 * *GESTIONEfILMS()
 	 */
 	public void sottoOp() {
 		String pass= MyUtil.leggiStringa(Costanti.INS_PASS);
@@ -146,8 +167,17 @@ public class GestioneMenu {
 					gestioneLibri();
 					break;
 					
-				case 3://sotto menu' prestiti
-					gestionePrestitiOperatore();
+				case 3://sotto menu' Dati
+					gestioneDatiOperatore();
+					break;
+				
+				case 4://sotto menu' films
+					gestioneFilms();
+					break;
+					
+				default: //in caso si inserisca un valore non riconosciuto (teoricamente mai applicato)
+					System.out.println(Costanti.COM_NON_RIC);
+					break;
 			
 				}
 			}while(!finit );
@@ -178,7 +208,7 @@ public class GestioneMenu {
 	 * *gestionePrestitiFruitore()
 	 * 
 	 */
-	private void sottoFruitore() {
+	private void sottoFruitore(Fruitore fruitore) {
 		MyMenu sottoFruitore = new MyMenu(Costanti.COSA_,Costanti.SCELTE_SOTTO_FRUITORE);{
 		boolean finito = false;
 				
@@ -191,19 +221,28 @@ public class GestioneMenu {
 					break;
 				
 				case 1: //Rinnovo iscrizione
-				
+					if(fruitore.statoRinnovo())
+						logs.addInRinnovati(fruitore);
 					fruitore.rinnovoIscrizione();
+					ServizioFile.salvaSingoloOggetto(fileLogs, logs, false);
+
 					break;
 				
 				case 2: //visualizza riepilogo
-				
 					fruitore.stampaFruitore();
 					break;	
-				case 3://cerca libro
-					libri.cercaLibro();
+					
+				case 3://sezione libri
+					gestioneLibriFruitore();
 					break;
-				case 4:	//Sezione prestiti
-					gestionePrestitiFruitore();
+					
+				case 4://sezione films
+					gestioneFilmsFruitore();
+					break;
+					
+				case 5:	//Sezione prestiti
+					gestionePrestitiFruitore(fruitore);
+					break;
 			
 				default: //in caso si inserisca un valore non riconosciuto (teoricamente mai applicato)
 					System.out.println(Costanti.COM_NON_RIC);
@@ -219,9 +258,9 @@ public class GestioneMenu {
 	 * *chiediPrestito()
 	 * *rinnovaPrestito()
 	 * *stampaPrestitiUtente()
-	 * *annullaPrestitoRisorsa()
+	 * *annullaPrestitoRisorsa() 
 	 */
-	private void gestionePrestitiFruitore() {
+	private void gestionePrestitiFruitore(Fruitore fruitore) {
 		
 		MyMenu sottoPrestitiFruitore = new MyMenu(Costanti.COSA_,Costanti.SCELTE_PRESTITO_FRUITORE);{
 			boolean finito = false;
@@ -235,22 +274,47 @@ public class GestioneMenu {
 						break;
 					
 					case 1: //chiedi il prestito
-						chiediIlPrestito();
+						chiediPrestito(fruitore);
 						break;
 					
 					case 2: //rinnova prestito
 						prestiti.rinnovaPrestito(fruitore);
 						ServizioFile.salvaSingoloOggetto(filePrestiti, prestiti, false);
 						ServizioFile.salvaSingoloOggetto(fileLibri, libri, false);
-					
+						ServizioFile.salvaSingoloOggetto(fileFilms, films, false);
+						ServizioFile.salvaSingoloOggetto(fileLogs, logs, false);
 						break;	
+						
 					case 3://Visualizza prestiti in corso
-						prestiti.stampaPrestitiUtente(prestiti.filtraPrestitiPerUser(getFruitore()));
+						if(prestiti.filtraPrestitiPerUser(fruitore).isEmpty())
+							System.out.println("Nessun prestito");
+						else
+							prestiti.stampaPrestitiUtente(prestiti.filtraPrestitiPerUser(fruitore));
 						break;
+						
 					case 4:	//annulla prestito di libro
-						prestiti.annullaPrestitoRisorsa(getFruitore(), libri.scegliPerNome(MyUtil.leggiStringaNonVuota("inserisci il titolo del libro del quale vuoi annullare il prestito: ")));
+						
+						if(prestiti.filtraPrestitiPerUser(fruitore).isEmpty())
+							System.out.println("Nessun prestito");
+						else {
+						prestiti.annullaPrestitoRisorsa(fruitore, libri.scegliPerNome(MyUtil.leggiStringaNonVuota(Costanti.ANNULLA_PER_TITOLO)));
 						ServizioFile.salvaSingoloOggetto(filePrestiti, prestiti, false);
 						ServizioFile.salvaSingoloOggetto(fileLibri, libri, false);
+						ServizioFile.salvaSingoloOggetto(fileLogs, logs, false);
+						}
+						break;
+						
+					case 5://annulla prestito film
+						if(prestiti.filtraPrestitiPerUser(fruitore).isEmpty())
+							System.out.println("Nessun prestito");
+						else {
+						
+						prestiti.annullaPrestitoRisorsa(fruitore, films.scegliPerNome(MyUtil.leggiStringaNonVuota(Costanti.ANNULLA_PER_TITOLO)));
+						ServizioFile.salvaSingoloOggetto(filePrestiti, prestiti, false);
+						ServizioFile.salvaSingoloOggetto(fileFilms, films, false);
+						ServizioFile.salvaSingoloOggetto(fileLogs, logs, false);
+						}
+						break;
 				
 					default: //in caso si inserisca un valore non riconosciuto (teoricamente mai applicato)
 						System.out.println(Costanti.COM_NON_RIC);
@@ -264,11 +328,47 @@ public class GestioneMenu {
 	}
 	
 	
+	/**
+	 * Scegli che tipo di risorsa chiedi in prestito libro o film e chiedi il prestito
+	 */
+	private void chiediPrestito(Fruitore fruitore) {
+		MyMenu  menuCerca= new MyMenu(Costanti.SCEGLI_PRESTITO, Costanti.SCELTE_PRESTITI); 
+		
+		boolean finito=false;
+
+		do{
+			int scelta=menuCerca.scegli();
+			switch(scelta){
+			
+			case 0: 
+				
+				finito=true;
+				break;
+			case 1:
+				
+				prestiti.chiediPrestitoLibro(fruitore, libri.scegliPerNome(MyUtil.leggiStringaNonVuota(Costanti.PRESTITO_PER_TITOLO)));
+				ServizioFile.salvaSingoloOggetto(filePrestiti, prestiti, false);
+				ServizioFile.salvaSingoloOggetto(fileLibri, libri, false);
+				ServizioFile.salvaSingoloOggetto(fileLogs, logs, false);
+				break;
+			case 2: 
+				
+				prestiti.chiediPrestitofilm(fruitore, films.scegliPerNome(MyUtil.leggiStringaNonVuota(Costanti.PRESTITO_PER_TITOLO)));
+				ServizioFile.salvaSingoloOggetto(filePrestiti, prestiti, false);
+				ServizioFile.salvaSingoloOggetto(fileFilms, films, false);
+				ServizioFile.salvaSingoloOggetto(fileLogs, logs, false);
+				break;
+			default: //in caso si inserisca un valore non riconosciuto (teoricamente mai applicato)
+				System.out.println(Costanti.COM_NON_RIC);
+				break;
+			}
+		}while(!finito );
+	}
 	
 	/**
 	 * Permette di chiedere un libro in prestito, previo controlli sul num di libri gia' in prestito
 	 */
-	private void chiediIlPrestito(){
+	/*private void chiediIlPrestito(){
 		
 		if(prestiti.contaPrestitiUtente(getFruitore().getUsername(), "Libri") == libro.getPrestitiMax())
 		
@@ -293,16 +393,16 @@ public class GestioneMenu {
 
 	}
 		
-	
+	*/
 	
 	
 	/**
 	 * Menu' lato operatore per la gestione dei prestiti, contiene:
 	 * *visualizzaPrestitiAttivi()
 	 */
-	private void gestionePrestitiOperatore() {
+	private void gestioneDatiOperatore() {
 		
-		MyMenu sottoOperatorePrestiti = new MyMenu(Costanti.GESTISCI_PRESTITI,Costanti.SCELTE_SOTTO_LIBRI);{
+		MyMenu sottoOperatorePrestiti = new MyMenu(Costanti.GESTISCI_SCEGLI,Costanti.SCELTE_SOTTO_GESTIONE);{
 			boolean finito = false;
 					
 				do{
@@ -317,7 +417,13 @@ public class GestioneMenu {
 						
 						prestiti.stampaPrestitiAttivi();
 						break;
-								
+					case 2:
+						
+						logs.menuQuery();
+						break;
+					case 3:
+						logs.menuStamapaLogs();
+						break;
 				
 					default: //in caso si inserisca un valore non riconosciuto (teoricamente mai applicato)
 						System.out.println(Costanti.COM_NON_RIC);
@@ -363,14 +469,17 @@ public class GestioneMenu {
 						
 					case 4:
 						libri.cercaLibro();
-						
+						break;
 						
 					case 5: //SALVA LAVORO
 						try {
 						ServizioFile.salvaSingoloOggetto(fileLibri, libri, true);
+						logs.addLibriPrestabiliInPassato(libri.libriRimossiUniforme());
+						ServizioFile.salvaSingoloOggetto(fileLogs, logs, false);
 						
-						} catch (Exception e) {  e.printStackTrace();	}
-						
+						} catch (Exception e){  
+							e.printStackTrace();	
+							}
 						break;	
 				
 				
@@ -384,6 +493,180 @@ public class GestioneMenu {
 		
 		
 	}
+	
+	
+	/**
+	 * Operazioni di ricerca e visualizzazione di libri lato fruitore
+	 */
+	private void gestioneLibriFruitore() {
+		MyMenu sottoOperatoreLibri = new MyMenu(Costanti.MENU_LIBRI,Costanti.SCELTE_SOTTO_LIBRI_FR);{
+			boolean finito = false;
+					
+				do{
+					int scelta=sottoOperatoreLibri.scegli();
+				
+					switch(scelta){
+					
+					case 0: //esci
+						finito=true;
+						break;
+						
+					case 1: //VISUALIZZA
+					
+						visualizzaLibri();
+						break;		
+						
+						
+					case 2:
+						libri.cercaLibro();
+						break;
+				
+					default: //in caso si inserisca un valore non riconosciuto (teoricamente mai applicato)
+						System.out.println(Costanti.COM_NON_RIC);
+						break;
+					}
+				} 	while(!finito);	
+			}
+	}
+	
+	/**
+	 * Sottomenu' per gestire le operzioni su films, quali: aggiunta, rimozione,ricerca e salvataggio delle operazioni
+	 */
+	private void gestioneFilms() {
+		MyMenu sottoOperatoreLibri = new MyMenu(Costanti.MENU_FILMS,Costanti.SCELTE_SOTTO_FILMS);{
+			boolean finito = false;
+					
+				do{
+					int scelta=sottoOperatoreLibri.scegli();
+				
+					switch(scelta){
+					case 0: //esci
+						finito=true;
+						break;
+					
+					case 1: //AGGIUNGI FILM
+						
+						inserisciFilmInSottocat();
+					
+						break;
+					
+					case 2: //RIMUOVI 
+						
+							films.removeFilm(MyUtil.leggiIntero(Costanti.REMOVE_FILM));
+	
+						break;	
+						
+					case 3: //VISUALIZZA
+							
+							films.stampaFilms();
+							
+						break;		
+						
+					case 4:
+							films.cercaFilm();
+						break;
+					case 5: //SALVA LAVORO
+						try {
+						ServizioFile.salvaSingoloOggetto(fileFilms, films, true);
+						logs.addFilmsPrestabiliInPassato(films.filmsRimossiUniforme());
+						ServizioFile.salvaSingoloOggetto(fileLogs, logs, false);
+						
+						} catch (Exception e){  
+							e.printStackTrace();	
+							}
+			
+						break;	
+				
+				
+					default: //in caso si inserisca un valore non riconosciuto (teoricamente mai applicato)
+						System.out.println(Costanti.COM_NON_RIC);
+						break;
+					}
+				} 	while(!finito);	
+			}
+		
+		
+		
+	}
+	
+	/**
+	 * Operazioni di riceca e visualizzazione di films lato fruitore
+	 */
+	private void gestioneFilmsFruitore() {
+		MyMenu sottoOperatoreLibri = new MyMenu(Costanti.MENU_FILMS,Costanti.SCELTE_SOTTO_FILMS_FR);{
+			boolean finito = false;
+					
+				do{
+					int scelta=sottoOperatoreLibri.scegli();
+				
+					switch(scelta){
+					case 0: //esci
+						finito=true;
+						break;
+					case 1: //VISUALIZZA
+							
+							films.stampaFilms();
+							
+						break;		
+						
+					case 2:
+							films.cercaFilm();
+						break;
+					
+				
+					default: //in caso si inserisca un valore non riconosciuto (teoricamente mai applicato)
+						System.out.println(Costanti.COM_NON_RIC);
+						break;
+					}
+				} 	while(!finito);	
+			}
+		
+		
+		
+	}
+	
+	
+	/**
+	 * Crea un istanza di film e la aggiunge in una sottoCategoria a scelta
+	 */
+	private void inserisciFilmInSottocat() {
+		
+		film= new Film(MyUtil.leggiStringaNonVuota(Costanti.INS_NOME), MyUtil.leggiData(Costanti.INS_DATA_OUT), MyUtil.leggiStringaNonVuota(Costanti.INS_REGISTA),
+				       MyUtil.inserisciAttori(), MyUtil.leggiIntero(Costanti.INS_NLIC), MyUtil.leggiIntero(Costanti.INS_CODICE),
+				       MyUtil.leggiStringaNonVuota(Costanti.INS_GENERE));
+		
+		MyMenu sceltaSottoCat = new MyMenu(Costanti.INS_FILM,Costanti.SCELTE_SOTTOCAT);{
+			boolean finito = false;
+			
+			do{
+				int scelta=sceltaSottoCat.scegli();
+		
+				switch(scelta){
+				case 0: //esci
+					finito=true;
+					break;
+			
+				case 1: // INSERISCI IN  ING
+			
+					films.addInIng(film);
+					finito=true;
+					break;
+			
+				case 2: // INSERISCI IN ITA
+			
+					films.addInIta(film);
+					finito=true;
+					break;	
+		
+				default: //in caso si inserisca un valore non riconosciuto (teoricamente mai applicato)
+					System.out.println(Costanti.COM_NON_RIC);
+					break;
+				}
+			} 	while(!finito);	
+		}
+	}
+	
+	
 	
 	/**
 	 * Crea una nuova istanza di libro e permette di scegliere in che sotto categoria inserirlo
@@ -462,6 +745,40 @@ public class GestioneMenu {
 			
 	}	
 	
+	/**
+	 * "Ricrea" l'array dei prestiti delle risorse perche' con la ricarica del file non puntano piu' agli stessi oggetti (????)
+	 */
+	public static void reloadArrayPrestiti(){
+		for(int i=0; i<prestiti.getPrestiti().size();i++){
+			if(prestiti.getPrestiti().get(i).getRisorsa() instanceof Libro ){
+				for(Risorsa libro :libri.getLibriIng().getArrayRisorse()) {
+				
+					if(prestiti.getPrestiti().get(i).getRisorsa().getCodiceUnivoco()==libro.getCodiceUnivoco())
+						prestiti.getPrestiti().get(i).setRisorsa(libro);
+					
+				}
+				for(Risorsa lib :libri.getLibriIta().getArrayRisorse()) {
+					
+					if(prestiti.getPrestiti().get(i).getRisorsa().getCodiceUnivoco()==lib.getCodiceUnivoco())
+						prestiti.getPrestiti().get(i).setRisorsa(lib);
+				}
+			}
+			
+			else if(prestiti.getPrestiti().get(i).getRisorsa() instanceof Film){
+					for(Risorsa film : films.getFilmsIng().getArrayRisorse()){
+						if(prestiti.getPrestiti().get(i).getRisorsa().getCodiceUnivoco()==film.getCodiceUnivoco())
+							prestiti.getPrestiti().get(i).setRisorsa(film);
+					}
+					for(Risorsa fil : films.getFilmsIta().getArrayRisorse()){
+						if(prestiti.getPrestiti().get(i).getRisorsa().getCodiceUnivoco()==fil.getCodiceUnivoco())
+							prestiti.getPrestiti().get(i).setRisorsa(fil);
+					}	
+			}
+		}
+			
+	}
+	
+	
 	
 	//Getters & Setters
 	
@@ -476,11 +793,6 @@ public class GestioneMenu {
 	public ArrayFruitore getFruitori() {
 		return fruitori;
 	}
-
-	public void setFruitori(ArrayFruitore fruitori) {
-		this.fruitori = fruitori;
-	}
-
 
 	public File getFile() {
 		return file;
@@ -498,7 +810,7 @@ public class GestioneMenu {
 		return libri;
 	}
 
-	public Libro getLibro() {
+	public Risorsa getLibro() {
 		return libro;
 	}
 
@@ -506,6 +818,27 @@ public class GestioneMenu {
 	public ArrayPrestito getPrestiti() {
 		return prestiti;
 	}
+	
+	public Risorsa getFilm() {
+		return film;
+	}
+
+	public Films getFilms() {
+		return films;
+	}
+
+	public File getFileFilms() {
+		return fileFilms;
+	}
+
+	public LogsDati getLogs() {
+		return logs;
+	}
+
+	public File getFileLogs() {
+		return fileLogs;
+	}
+
 	
 }
 

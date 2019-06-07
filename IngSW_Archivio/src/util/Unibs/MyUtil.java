@@ -225,9 +225,9 @@ public class MyUtil {
 	
 	public static GregorianCalendar leggiData(String messaggio) {
 			System.out.println("\n"+messaggio +"\n");
-		 int anno= MyUtil.leggiInteroConMinimo("Inserisci l'anno", 1900);
-		 int mese= MyUtil.leggiIntero("Inserisci il mese", 1, 12)-1;
-		 int giorno =MyUtil.leggiIntero("Inserisci il giorno",1, 31);
+		 int anno= MyUtil.leggiInteroConMinimo("Inserisci l'anno: ", 1900);
+		 int mese= MyUtil.leggiIntero("Inserisci il mese: ", 1, 12)-1;
+		 int giorno =MyUtil.leggiIntero("Inserisci il giorno: ",1, 31);
 		 
 		return new GregorianCalendar(anno, mese, giorno) ;
 		
@@ -240,7 +240,19 @@ public class MyUtil {
 		String autore = leggiStringaNonVuota("Inserisci l'autore: ");
 		autori.add(autore+" ");
 	} 
-	while(MyUtil.yesOrNo("ci sono altri autori? "));
+	while(MyUtil.yesOrNo("ce ne sono altri? "));
+	
+	return autori;
+	}
+	
+	public static  ArrayList<String> inserisciAttori(){
+		ArrayList<String> autori = new ArrayList<String>();
+	do
+	{
+		String autore = leggiStringaNonVuota("Inserisci l'attore: ");
+		autori.add(autore+" ");
+	} 
+	while(MyUtil.yesOrNo("ce ne sono altri? "));
 	
 	return autori;
 	}

@@ -20,6 +20,7 @@ public class Prestito implements Serializable  {
 	private GregorianCalendar dataFinePrestito;
 	private GregorianCalendar dataRichiestaProroga;
 	private boolean prorogaOk;
+	private boolean prestitoFinito;
 	
 	/**
 	 * Il costruttore Prestito associa il fruitore ad una risorsa ed inizializza attributi legati al prestito
@@ -34,7 +35,8 @@ public class Prestito implements Serializable  {
 
 		dataRichiestaProroga = new GregorianCalendar(dataFinePrestito.get(GregorianCalendar.YEAR), dataFinePrestito.get(GregorianCalendar.MONTH), dataFinePrestito.get(GregorianCalendar.DAY_OF_MONTH));
 		dataRichiestaProroga.add(GregorianCalendar.DAY_OF_MONTH, risorsa.getGiorniPrimaPerProroga());
-		prorogaOk = false;		
+		prorogaOk = false;	
+		prestitoFinito=false;
 	}
 
 	
@@ -69,6 +71,13 @@ public class Prestito implements Serializable  {
 			System.out.println(Costanti.NO_RINNOVO);
 		
 	}
+	
+	public void finisciPrestito() {
+		
+		risorsa.finePrestito();
+		prestitoFinito=true;
+	}
+	
 	/**
 	 * consente il rinnovo del prestito (1 sola volta)
 	 */
@@ -76,14 +85,17 @@ public class Prestito implements Serializable  {
 		
 		GregorianCalendar oggi=(GregorianCalendar) GregorianCalendar.getInstance();
 		
-		if(oggi.after(getDataRichiestaProroga())){
+		if(getProrogaOk()==true)
+			System.out.println(Costanti.NO_PROROGA);
+		
+		else if(oggi.after(getDataRichiestaProroga())&& getProrogaOk()==false){
 				setDataInizioPrestito(oggi);
 				setProrogaOk(true);
+				
 			}
-		else if(getProrogaOk()==true)
-			System.out.println(Costanti.NO_PROROGA);
-		else
-			System.out.println(Costanti.NO_RINNOVABILE);
+
+		else if(!oggi.after(getDataRichiestaProroga())&& getProrogaOk()==false)
+				System.out.println(Costanti.NO_RINNOVABILE);
 			
 	}
 	
@@ -135,6 +147,16 @@ public class Prestito implements Serializable  {
 
 	public void setProrogaOk(boolean prorogaOk) {
 		this.prorogaOk = prorogaOk;
+	}
+
+
+	public boolean isPrestitoFinito() {
+		return prestitoFinito;
+	}
+
+
+	public void setPrestitoFinito(boolean prestitoFinito) {
+		this.prestitoFinito = prestitoFinito;
 	}
 	
 	

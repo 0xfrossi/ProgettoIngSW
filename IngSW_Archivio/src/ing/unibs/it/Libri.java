@@ -6,16 +6,20 @@ import util.Unibs.MyMenu;
 import util.Unibs.MyUtil;
 
 
-
+/**
+ * Classe che inizializza la categoria libri con relative sotto categorie
+ * @author Francesco Rossi
+ *
+ */
 public class Libri implements Serializable  {
 	
 	//Attributi	
 	private static final long serialVersionUID = 1L;
-	
 	private Categoria libri;
 	private Categoria libriIng;
 	private Categoria libriIta;
-	
+	private ArrayList<Risorsa> rimossi;
+
 
 	/**
 	 * Costruttore della classe crea la categoria e le sotto-categorie
@@ -27,6 +31,18 @@ public class Libri implements Serializable  {
 		libriIta= new Categoria(); 
 		libri.add(libriIng);
 		libri.add(libriIta);
+		rimossi=new ArrayList<Risorsa>();
+	}
+	
+	
+	public ArrayList<Risorsa> libriRimossiUniforme(){
+		ArrayList<Risorsa> tutti= new ArrayList<Risorsa>();
+		for(Risorsa risorsa: libriIng.getRisorseRimosse()) 
+			tutti.add(risorsa);
+		for(Risorsa risorsa: libriIta.getRisorseRimosse()) 
+			tutti.add(risorsa);
+			
+		return tutti;
 	}
 	
 	/**
@@ -35,7 +51,7 @@ public class Libri implements Serializable  {
 	 */
 	public void addInIta(Risorsa l) {
 		if(libriIng.checkRisorsa(l))
-			System.out.println("Risorsa gia' presente");
+			System.out.println(Costanti.RISORSA_PRESENTE);
 
 		else libriIta.addInSotto(l);
 	}
@@ -80,8 +96,8 @@ public class Libri implements Serializable  {
 	public void stampaIta() {
 		if(libriIta.getArrayRisorse().isEmpty())
 			System.out.println(Costanti.ARCHIVIO_VUOTO);
-		
-		libriIta.stampaDesc();
+		else
+			libriIta.stampaDesc();
 	}
 	
 	
@@ -91,8 +107,8 @@ public class Libri implements Serializable  {
 	public void stampaIng() {
 		if(libriIng.getArrayRisorse().isEmpty())
 			System.out.println(Costanti.ARCHIVIO_VUOTO);
-		
-		libriIng.stampaDesc();
+		else
+			libriIng.stampaDesc();
 	}
 	
 	/**
@@ -101,8 +117,8 @@ public class Libri implements Serializable  {
 	public void stampaTutto() {
 		if(libriIng.getArrayRisorse().isEmpty()&& libriIta.getArrayRisorse().isEmpty())
 			System.out.println(Costanti.ARCHIVIO_VUOTO);
-			
-		libri.stampaDesc();
+		else	
+			libri.stampaDesc();
 	}
 	
 	
@@ -162,6 +178,19 @@ public class Libri implements Serializable  {
 	
 	}
 	
+	/**
+	 * ricomponi libri in un unica lista
+	 * @return array
+	 */
+	public ArrayList<Risorsa> libriUniforme(){
+		ArrayList<Risorsa> tutti= new ArrayList<Risorsa>();
+		for(Risorsa risorsa: libriIng.getArrayRisorse()) 
+			tutti.add(risorsa);
+		for(Risorsa risorsa: libriIta.getArrayRisorse()) 
+			tutti.add(risorsa);
+			
+		return tutti;
+	}
 	
 	/**
 	 * Effettua una ricerca di un libro tramite titolo o parte di esso
@@ -170,18 +199,22 @@ public class Libri implements Serializable  {
 	private void cercaLibroPerNome(String titolo) {
 		
 		boolean trovato=false;
-		ArrayList<Risorsa> tutti= libri.arrayUniforme();
+		ArrayList<Risorsa> tutti= libriUniforme();
 		
-		for(Risorsa risorsa : tutti) {
-			if(risorsa.getNome().toLowerCase().contains(titolo.toLowerCase()) || risorsa.getNome().toLowerCase().equals(titolo.toLowerCase())) {
-					trovato=true;
-					aggiungiNomeSottoCat(risorsa);
-					risorsa.stampaDesc();
+		if(libriIng.getArrayRisorse().isEmpty()&& libriIta.getArrayRisorse().isEmpty())
+			System.out.println(Costanti.ARCHIVIO_VUOTO);
+		
+		else {
+			for(Risorsa risorsa : tutti) {
+				if(risorsa.getNome().toLowerCase().contains(titolo.toLowerCase()) || risorsa.getNome().toLowerCase().equals(titolo.toLowerCase())) {
+						trovato=true;
+						aggiungiNomeSottoCat(risorsa);
+						risorsa.stampaDesc();
+				}
 			}
-		}
-		if(trovato==false)
-			System.out.print(Costanti.LIBRO_NON_TROVATO);
-		
+			if(trovato==false)
+				System.out.println(Costanti.LIBRO_NON_TROVATO);
+			}
 	}
 	
 	
@@ -192,32 +225,69 @@ public class Libri implements Serializable  {
 	private void cercaLibroPerAutore(String autore) {
 		
 		boolean trovato=false;
-		ArrayList<Risorsa> tutti= libri.arrayUniforme();
+		ArrayList<Risorsa> tutti= libriUniforme();
 		
-		for(Risorsa risorsa : tutti) {
-			for(String autor: risorsa.getAutori()) {
-				if(autor.toLowerCase().equals(autore.toLowerCase()) || autor.toLowerCase().equals(autore.toLowerCase())) {
-					trovato=true;
-					aggiungiNomeSottoCat(risorsa);
-					risorsa.stampaDesc();
-				}
-			}	
-		}
+		if(libriIng.getArrayRisorse().isEmpty()&& libriIta.getArrayRisorse().isEmpty())
+			System.out.println(Costanti.ARCHIVIO_VUOTO);
+		
+		else {
+			
+			for(Risorsa risorsa : tutti) {
+				for(String autor: risorsa.getAutori()) {
+					if(autor.toLowerCase().equals(autore.toLowerCase()) || autor.toLowerCase().contains(autore.toLowerCase())) {
+						trovato=true;
+						aggiungiNomeSottoCat(risorsa);
+						risorsa.stampaDesc();
+					}
+				}	
+			}
 		if(trovato==false)
-			System.out.print(Costanti.LIBRO_NON_TROVATO);
-		
+			System.out.println(Costanti.LIBRO_NON_TROVATO);
+		}
 	}
 	
 	/**
-	 * Seleziono un libro(type risorsa) tramite la ricerca per titolo,per chiderne il prestito
+	 * Seleziona libro da una lista
+	 * @return
+	 */
+	public Risorsa scegliPerLista() {
+		
+		int seleziona;
+		ArrayList<Risorsa> tutti= libriUniforme();
+		if(libriIng.getArrayRisorse().isEmpty()&& libriIta.getArrayRisorse().isEmpty()) {
+			System.out.println(Costanti.ARCHIVIO_VUOTO);
+			return null;
+		}
+		
+		for(int i = 0; i < tutti.size(); i++){
+			System.out.println("\n" + (i+1) + ".");
+			aggiungiNomeSottoCat(tutti.get(i));
+			tutti.get(i).stampaDesc();
+			System.out.println();
+		}
+
+		
+		seleziona=MyUtil.leggiIntero(Costanti.SELEZIONA_LIBRO_PRESTITO, 1, tutti.size());
+		return tutti.get(seleziona-1);
+		
+	}
+	
+	
+	
+	/**
+	 * Seleziono un libro(type risorsa) tramite la ricerca per titolo
 	 * @param titolo il tittolo del libro da selezionare
 	 * @return la risorsa (Libro) selezionata
 	 */
 	public Risorsa scegliPerNome(String titolo) {
 		int seleziona;
-		ArrayList<Risorsa> tutti= libri.arrayUniforme();
+		ArrayList<Risorsa> tutti= libriUniforme();
 		ArrayList<Risorsa> selezionati=new ArrayList<Risorsa>();
-		
+		if(libriIng.getArrayRisorse().isEmpty()&& libriIta.getArrayRisorse().isEmpty()) {
+			System.out.println(Costanti.ARCHIVIO_VUOTO);
+			return null;
+		}
+			
 		for(Risorsa risorsa : tutti) {
 			if(risorsa.getNome().toLowerCase().contains(titolo.toLowerCase()) || risorsa.getNome().toLowerCase().equals(titolo.toLowerCase())) 
 					selezionati.add(risorsa);
@@ -237,25 +307,26 @@ public class Libri implements Serializable  {
 
 			
 			seleziona=MyUtil.leggiIntero(Costanti.SELEZIONA_LIBRO_PRESTITO, 1, selezionati.size());
-			if(selezionati.get(seleziona-1).getInPrestito()< selezionati.get(seleziona-1).getNumLicenze())
+			return selezionati.get(seleziona-1);
+			
+		/*	if(selezionati.get(seleziona-1).getInPrestito()< selezionati.get(seleziona-1).getNumLicenze())
 				return tutti.get(seleziona-1);
 			else {
 				System.out.println(Costanti.COPIE_GIA_INPRESTITO);
-				return null;
+				return null; */
 			}
-		}	
-	}
-		
-		
-	
-	
-	
-	
+		}
 
-	//GETTERS & SETTERS
-	
-	
-	
-	
+	public Categoria getLibri() {
+		return libri;
+	}
+
+	public Categoria getLibriIng() {
+		return libriIng;
+	}
+
+	public Categoria getLibriIta() {
+		return libriIta;
+	}	
 	
 }

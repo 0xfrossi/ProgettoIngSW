@@ -23,6 +23,7 @@ public class Fruitore implements Serializable {
 	private String  username;
 	private String  password;
 	
+	
 	/**
 	 * Costruttore
 	 * @param nome il nome del fruitore
@@ -40,13 +41,12 @@ public class Fruitore implements Serializable {
 		this.cognome=cognome;
 		this.DataDiNascita=DataDiNascita;
 		this.residenza=residenza;
-		dataIscrizione= (GregorianCalendar) GregorianCalendar.getInstance();
+		this.dataIscrizione= (GregorianCalendar) GregorianCalendar.getInstance();
 		this.username=username;
 		this.password=password;
-		dataScadenzaIscrizione= CalcoloDataScadenza();
-		dataRinnovoIscrizione= CalcoloDataRichiestaRinnovo();
-		statoFruitore= true;
-		
+		this.dataScadenzaIscrizione= CalcoloDataScadenza();
+		this.dataRinnovoIscrizione= CalcoloDataRichiestaRinnovo();
+		this.statoFruitore= true;
 	}
 
  	
@@ -80,12 +80,14 @@ public class Fruitore implements Serializable {
  	 /**
  	  * Mi da informazioni sulla possibilita' di eseguire il rinnovo quel giorno
  	  */
- 	private boolean statoRinnovo() {
+ 	public boolean statoRinnovo() {
  		
  		GregorianCalendar dataCorrente= (GregorianCalendar) GregorianCalendar.getInstance();
- 		ControlloDecadenzaFruitore();
- 		if(dataCorrente.compareTo(dataRinnovoIscrizione)==1 && statoFruitore ) return true;
- 		else return false;
+ 		//ControlloDecadenzaFruitore();
+ 		if(dataCorrente.compareTo(dataRinnovoIscrizione)==1  )
+ 			return true;
+ 		else 
+ 			return false;
  	} 
  	 
  	
@@ -96,13 +98,19 @@ public class Fruitore implements Serializable {
  		 
  		 if(statoRinnovo()) {
  			 setDataIscrizione((GregorianCalendar) GregorianCalendar.getInstance());
+ 
  			 System.out.printf(Costanti.ISCRIZIONE_OK,  MyUtil.toStringData( dataScadenzaIscrizione),MyUtil.toStringData( dataRinnovoIscrizione));
  		 }
+ 		 
+ 		 else 
+ 			 System.out.printf(Costanti.ISCRIIONE_DOPO, MyUtil.toStringData(dataRinnovoIscrizione),MyUtil.toStringData(dataScadenzaIscrizione));
+ 		 /*
  		 else if (!statoFruitore)
- 			 				System.out.println(Costanti.ISCRIZIONE_DECADUTA);
+ 			 	System.out.println(Costanti.ISCRIZIONE_DECADUTA);
+ 		 
  		 else if(statoFruitore && statoRinnovo()==true ) 
  			System.out.printf(Costanti.ISCRIIONE_DOPO, MyUtil.toStringData(dataRinnovoIscrizione),MyUtil.toStringData(dataScadenzaIscrizione));
- 		 
+ 		*/ 
  	 }
  	 
  	 
@@ -112,7 +120,8 @@ public class Fruitore implements Serializable {
  	 public void ControlloDecadenzaFruitore() {
  		 
  		GregorianCalendar dataCorrente= (GregorianCalendar) GregorianCalendar.getInstance();
- 		if(dataCorrente.compareTo(dataScadenzaIscrizione)==1) setStatoFruitore(false);
+ 		if(dataCorrente.compareTo(dataScadenzaIscrizione)==1) 
+ 			setStatoFruitore(false);
  		
  	 }
  	 
@@ -179,7 +188,7 @@ public class Fruitore implements Serializable {
 		this.residenza = residenza;
 	}
 
-	public boolean isStatoFruitore() {
+	public boolean getStatoFruitore() {
 		return statoFruitore;
 	}
 
@@ -218,10 +227,15 @@ public class Fruitore implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	
-	
-	
+	/*
+	public boolean getIscrizioneDecaduta() {
+		return iscrizioneDecaduta;
+	}
+
+	public void setIscrizioneDecaduta(boolean iscrizioneDecaduta) {
+		this.iscrizioneDecaduta = iscrizioneDecaduta;
+	}
+	*/
 	
 
 }

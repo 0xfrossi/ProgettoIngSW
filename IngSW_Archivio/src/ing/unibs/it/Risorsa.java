@@ -45,5 +45,7 @@ public abstract class Risorsa implements Serializable, Loanable {
 	
 	public  abstract ArrayList<String> getAutori();
 	
+	public abstract ArrayList<String> getAttori();
+	
 	public abstract int getNumLicenze();
 }

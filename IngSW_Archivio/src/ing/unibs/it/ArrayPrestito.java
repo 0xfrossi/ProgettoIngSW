@@ -18,6 +18,7 @@ public class ArrayPrestito implements Serializable {
 	//Attributi
 	private static final long serialVersionUID = 1L;
 	private ArrayList<Prestito> prestiti;
+	private LogsDati logs;
 	
 	
 	/**
@@ -25,6 +26,7 @@ public class ArrayPrestito implements Serializable {
 	 */
 	public ArrayPrestito() {
 		prestiti= new ArrayList<Prestito>();
+		LogsDati.getIstance();
 	}
 	
 	
@@ -37,7 +39,7 @@ public class ArrayPrestito implements Serializable {
 	 */
 	public boolean prestitoNotExist(Fruitore fruitore, Risorsa risorsa){
 		for(int i=0;i<prestiti.size();i++){
-			if(prestiti.get(i).getRisorsa().getNome().equals(risorsa.getNome()) && prestiti.get(i).getFruitore().getUsername().equals(fruitore.getUsername()))
+			if(prestiti.get(i).getRisorsa().getCodiceUnivoco()==risorsa.getCodiceUnivoco() && prestiti.get(i).getFruitore().getUsername().equals(fruitore.getUsername()))
 				return false;	
 		}
 		return true;
@@ -48,10 +50,14 @@ public class ArrayPrestito implements Serializable {
 	 */
 	public void checkPrestiti(){
 		for (int i = 0; i < prestiti.size(); i++){
-			if(prestiti.get(i).getDataFinePrestito().compareTo((GregorianCalendar)GregorianCalendar.getInstance()) < 0){
+			if(!prestiti.get(i).isPrestitoFinito()) {
+				if(prestiti.get(i).getDataFinePrestito().compareTo((GregorianCalendar)GregorianCalendar.getInstance()) < 0){
 				
+				prestiti.get(i).setPrestitoFinito(true);
 				prestiti.get(i).getRisorsa().finePrestito();
+				logs.addPrestitiTerminati(prestiti.get(i));
 				prestiti.remove(i);					
+				}
 			}
 		}
 	
@@ -88,6 +94,8 @@ public class ArrayPrestito implements Serializable {
 		
 		Prestito prestito = new Prestito(fruitore, risorsa);
 		prestiti.add(prestito);
+		
+		logs.addInlogsPrestiti(prestito);
 		prestito.getRisorsa().inizioPrestito();//aggiorno il num copie in prestito	
 	}
 	
@@ -182,7 +190,9 @@ public class ArrayPrestito implements Serializable {
 			numRisorsa = MyUtil.leggiIntero("\n Seleziona la risorsa a cui vuoi rinnovare il prestito: ", 1, prestiti.size());		
 			Prestito prestitoSelezionato = prestiti.get(numRisorsa-1);*/
 			selezionaPrestito(fruitore).rinnovaPrestito();
-				
+			
+			if(selezionaPrestito(fruitore).getProrogaOk())
+				logs.addInProrogati(selezionaPrestito(fruitore));
 				
 				/*if(oggi.after(prestitoSelezionato.getDataRichiestaProroga()))
 //				e' necessariamente precedente alla data di scadenza prestito altrimenti sarebbe stato rimosso
@@ -212,7 +222,8 @@ public class ArrayPrestito implements Serializable {
 			
 			for(int i = prestiti.size()-1; i >= 0; i--){
 				if(prestiti.get(i).getFruitore().getUsername().equals(fruitore.getUsername()) && prestiti.get(i).getRisorsa().getCodiceUnivoco()==risorsaDaAnnullare.getCodiceUnivoco()){
-					prestiti.get(i).getRisorsa().finePrestito();
+					prestiti.get(i).setPrestitoFinito(true);
+					logs.addPrestitiTerminati(prestiti.get(i));
 					prestiti.remove(i);
 					System.out.println(Costanti.PRESTITO_ANNULLATO);
 				}
@@ -231,8 +242,9 @@ public class ArrayPrestito implements Serializable {
 		
 		for(int i = prestiti.size()-1; i >= 0; i--){
 			if(prestiti.get(i).getFruitore().getUsername().equals(utente.getUsername())){
-				
+				prestiti.get(i).setPrestitoFinito(true);
 				prestiti.get(i).getRisorsa().finePrestito();
+				logs.addPrestitiTerminati(prestiti.get(i));
 				prestiti.remove(i);
 			}
 		}
@@ -247,6 +259,83 @@ public class ArrayPrestito implements Serializable {
 		for(int i = 0; i < utenti.size(); i++)
 			annullaPrestitiUtente(utenti.get(i));	
 	}
+	
+	
+	
+	/**
+	 * Permette di chiedere un libro in prestito, previo controllo sul numero di libri gia' in prestito
+	 */
+	public void chiediPrestitoLibro(Fruitore fruitore ,Risorsa libro){
+		
+		if(libro==null)
+			System.out.println("nessun libro disponibile");
+		
+		else {
+			if(contaPrestitiUtente(fruitore.getUsername(), "Libri") == libro.getPrestitiMax())
+		
+				System.out.println(Costanti.LIBRI_MAX);
+		
+			else{
+			//Libro libro = (Libro) libri.scegliPerNome(MyUtil.leggiStringaNonVuota(Costanti.INS_TITOLO_PRESTITO));
+		
+				if(libro.getInPrestito()< libro.getNumLicenze()) {
+					if(prestitoNotExist(fruitore, libro)){
+						addPrestito(fruitore,libro );
+						
+						System.out.println(Costanti.PRENOTAZIONE_OK);
+					}
+					else
+						System.out.println(Costanti.LIBRO_POSSEDUTO);	
+				}
+				else 
+					System.out.println(Costanti.COPIE_GIA_INPRESTITO);
+			
+		}
+		//return libro==null
+		}
+	 
+	}
+	
+
+	/**
+	 * Permette di chiedere un libro in prestito, previo controllo sul numero di libri gia' in prestito
+	 */
+	public void chiediPrestitofilm(Fruitore fruitore ,Risorsa film){
+		
+		if(film==null)
+			System.out.println("nessun libro disponibile");
+		
+		else {
+		
+		if(contaPrestitiUtente(fruitore.getUsername(), "Films") == film.getPrestitiMax())
+		
+			System.out.println(Costanti.FILMS_MAX);
+		
+		else{
+			//Film film = (Film) films.scegliPerNome(MyUtil.leggiStringaNonVuota(Costanti.INS_TITOLO_PRESTITO_F));
+			
+			if(film.getInPrestito()< film.getNumLicenze()) {
+				
+				if(prestitoNotExist(fruitore, film)){
+					addPrestito(fruitore, film);
+					System.out.println(Costanti.PRENOTAZIONE_OK);
+				}
+				else
+					System.out.println(Costanti.FILM_POSSEDUTO);
+			}
+			else 
+				System.out.println(Costanti.COPIE_GIA_INPRESTITO);
+				
+			}
+		//return libro==null
+		
+		}
+	}
+	
+	
+	
+	
+	
 	
 	
 	
