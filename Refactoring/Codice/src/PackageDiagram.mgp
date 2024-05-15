@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PackageAnalysis>
+    <Package name="controller" x="71" y="54">
+        <DependencyLink destination="interfaces"/>
+        <DependencyLink destination="view"/>
+        <DependencyLink destination="customExceptions"/>
+        <DependencyLink destination="handlers.handlersStampe"/>
+        <DependencyLink destination="model"/>
+        <DependencyLink destination="services"/>
+        <DependencyLink destination="myUtil"/>
+    </Package>
+    <Package name="customExceptions" x="207" y="466"/>
+    <Package name="interfaces" x="405" y="25"/>
+    <Package name="model" x="23" y="207">
+        <DependencyLink destination="interfaces"/>
+        <DependencyLink destination="customExceptions"/>
+        <DependencyLink destination="myUtil"/>
+    </Package>
+    <Package name="services" x="424" y="278">
+        <DependencyLink destination="interfaces"/>
+        <DependencyLink destination="controller"/>
+        <DependencyLink destination="model"/>
+        <DependencyLink destination="handlers.handlersMenu"/>
+        <DependencyLink destination="myUtil"/>
+    </Package>
+    <Package name="view" x="782" y="297">
+        <DependencyLink destination="myUtil"/>
+    </Package>
+    <Package name="myUtil" x="591" y="442"/>
+    <Package name="handlers.handlersStampe" x="628" y="170">
+        <DependencyLink destination="controller"/>
+        <DependencyLink destination="interfaces"/>
+        <DependencyLink destination="view"/>
+        <DependencyLink destination="myUtil"/>
+    </Package>
+    <Package name="handlers.handlersMenu" x="640" y="53">
+        <DependencyLink destination="controller"/>
+        <DependencyLink destination="view"/>
+        <DependencyLink destination="model"/>
+        <DependencyLink destination="services"/>
+        <DependencyLink destination="myUtil"/>
+    </Package>
+</PackageAnalysis>
